@@ -42,29 +42,29 @@
         <div class="w-full md:w-1/5 bg-white rounded">
             <div class="p-4 text-center"> <!-- Agregar text-center aquí -->
                 <span class="text-2xl font-extrabold">Budgeted</span>
-                <h3 class="text-xl font-semibold mt-2">{{ number_format($global_price, 0, ',', '.')}} $</h3>
+                <h3 class="text-xl font-semibold mt-2">{{ number_format($budgeted, 0, ',', '.')}} $</h3>
             </div>
         </div>
 
         <div class="w-full md:w-1/5 bg-white rounded mb-2 md:mb-0">
             <div class="p-4 text-center"> <!-- Agregar text-center aquí -->
                 <span class="text-2xl font-extrabold">Booked</span>
-                <h3 class="text-xl font-semibold mt-2">{{ number_format($budgeted, 0, ',', '.')}} $</h3>
+                <h3 class="text-xl font-semibold mt-2">{{ number_format($booked, 0, ',', '.')}} $</h3>
             </div>
         </div>
         {{-- PONER EN VERDE CUANDO SE HAYA DADO COMO TERMINADO EL PROYECTO --}}
-        @if ($executed/$global_price*100 === 100)
+        @if ($project->state === "finished")
             <div class="bg-green-400 w-full md:w-1/5 rounded mb-2 md:mb-0">
-                <div class="p-4 text-center"> <!-- Agregar text-center aquí -->
-                    <span class="text-2xl font-extrabold">Project</span>
-                    <h3 class="text-xl font-semibold mt-2">Complete</h3>
+                <div class="p-4 text-center">
+                    <span class="text-2xl font-extrabold">Complete</span>
+                    <h3 class="text-xl font-semibold mt-2">{{ number_format($percentage, 2, ',', '.') }} %</h3>
                 </div>
             </div>
         @else
             <div class="bg-white w-full md:w-1/5 rounded mb-2 md:mb-0">
-                <div class="p-4 text-center"> <!-- Agregar text-center aquí -->
+                <div class="p-4 text-center">
                     <span class="text-2xl font-extrabold">Executed</span>
-                    <h3 class="text-xl font-semibold mt-2">{{ number_format($executed/$global_price*100, 2, ',', '.') }} %</h3>
+                    <h3 class="text-xl font-semibold mt-2">{{ number_format($percentage, 2, ',', '.') }} %</h3>
                 </div>
             </div>
         @endif

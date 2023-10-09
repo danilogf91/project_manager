@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Data;
+use App\Models\Project;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
 
@@ -15,57 +16,59 @@ class EditData extends Component
     public $values;
     public $projectId;
 
+    public $rateEuros = 100;
+
     #[Rule('required|string|max:255')]
     public $area;
-    
+
     #[Rule('required|string|max:255')]
     public $group_1;
-    
+
     #[Rule('required|string|max:255')]
     public $group_2;
-    
+
     #[Rule('required|string|max:255')]
     public $general_classification;
-    
+
     #[Rule('required|string|max:255')]
     public $item_type;
-    
+
     #[Rule('required|numeric|min:0')]
     public $qty;
-    
+
     #[Rule('required|numeric|min:0')]
     public $unit_price;
-    
+
     #[Rule('required|numeric|min:0')]
     public $global_price;
-    
+
     #[Rule('required|string|max:255')]
     public $stage;
-    
+
     #[Rule('required|numeric|min:0')]
     public $real_value;
-    
+
     #[Rule('required|numeric|min:0')]
     public $committed;
-    
+
     #[Rule('required|numeric|between:0,100')]
     public $percentage;
-    
+
     #[Rule('required|string|max:500')]
     public $supplier;
-    
+
     #[Rule('nullable|string|max:500')]
     public $code;
-    
+
     #[Rule('nullable|string|max:255')]
     public $order_no;
-    
+
     #[Rule('nullable|string|max:255')]
     public $input_num;
-    
+
     #[Rule('nullable|string')]
     public $observations;
-    
+
     #[Rule('nullable|string')]
     public $description;
 
@@ -91,6 +94,12 @@ class EditData extends Component
         $this->input_num = $data->input_num;
         $this->description = $data->description;
         $this->observations = $data->observations;
+
+        $id = $this->projectId;
+
+        $this->rateEuros = Project::whereHas('data', function ($query) use ($id) {
+            $query->where('id', $id);
+        })->value('rate');
     }
 
     public function update(Data $projectData)
@@ -110,6 +119,7 @@ class EditData extends Component
         $projectData->committed = $this->committed;
         $projectData->percentage = $this->percentage;
         $projectData->executed_dollars = ($this->percentage * ($this->qty * $this->unit_price) / 100);
+        $projectData->executed_euros = ($this->percentage * ($this->qty * $this->unit_price * $this->rateEuros) / 100);
         $projectData->supplier = $this->supplier;
         $projectData->code = $this->code;
         $projectData->order_no = $this->order_no;

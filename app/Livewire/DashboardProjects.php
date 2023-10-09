@@ -48,16 +48,22 @@ class DashboardProjects extends Component
     public function mount(Project $project)
     {
         $this->project = $project;
-        $this->percentage = round(Data::where('project_id', $this->project->id)->avg('percentage'), 2);
         $this->total = round(Data::where('project_id', $this->project->id)->sum('global_price'), 2);
-        $this->executed_dollars = round(Data::where('project_id', $this->project->id)->sum('executed_dollars'), 2);
+        // $this->executed_dollars = round(Data::where('project_id', $this->project->id)->sum('executed_dollars'), 2);
         $this->real_value = round(Data::where('project_id', $this->project->id)->sum('real_value'), 2);
         $this->committed = round(Data::where('project_id', $this->project->id)->sum('committed'), 2);
         $this->global_price = round(Data::where('project_id', $this->project->id)->sum('global_price'), 2);
 
-        $this->budgeted = round(Data::where('project_id', $this->project->id)->sum('committed'), 2);
-        $this->booked = round(Data::where('project_id', $this->project->id)->sum('real_value'), 2);
+        $this->budgeted = round(Data::where('project_id', $this->project->id)->sum('global_price'), 2);
+        $this->booked = round(Data::where('project_id', $this->project->id)->sum('committed'), 2);
         $this->executed = round(Data::where('project_id', $this->project->id)->sum('executed_dollars'), 2);
+        $this->executed_dollars = $this->executed;
+
+        if ($this->global_price != 0) {
+            $this->percentage = round($this->executed / $this->global_price * 100, 2);
+        } else {
+            $this->percentage = 0;
+        }
 
         $dataModel = new Data();
         $this->columnNames = $dataModel->getColumnNames();

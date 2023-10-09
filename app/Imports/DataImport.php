@@ -32,7 +32,7 @@ class DataImport implements WithHeadingRow, ToModel
             'stage' => $row['stage'],
             'real_value' => $row['real'],
             'committed' => $row['committed'],
-            'percentage' => 100 * ((float)($row['percentage'])),
+            'percentage' => 1 * ((float)($row['percentage'])),
             'executed_dollars' => ((float)($row['percentage'])) * ((float)($row['committed'])),
             'executed_euros' => round((((float)($row['percentage'])) * ((float)($row['committed']))) / 1.07, 2),
             'supplier' => $row['supplier'],
