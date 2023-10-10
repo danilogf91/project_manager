@@ -264,7 +264,7 @@
                         htmlFor="input_num"
                         class="block text-sm font-medium"
                     >
-                        IMPUT NUMBER
+                        INPUT NUMBER
                     </label>
                     <input
                         wire:model.live="input_num"

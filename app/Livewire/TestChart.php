@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Http\Controllers\ExchangeRate;
 use App\Models\Data;
 use App\Models\Project;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
@@ -70,17 +71,34 @@ class TestChart extends Component
     public $dollarOrEuro = "dollar";
     public $stateProject = [];
 
+    public $showSpinner = true;
+
+    public $exchangeRate = 1;
+
     public $totalsByInvestment = [];
     public $totalsByState = [];
 
     public function render()
     {
-        $this->budgeted = $this->searchFunction($this->yearSearch, 'start_date', 'global_price'); // OK
-        $this->booked = $this->searchFunction($this->yearSearch, 'start_date', 'committed');
-        $this->executed = $this->searchFunction($this->yearSearch, 'start_date', 'executed_dollars');
+        if ($this->dollarOrEuro === "dollar") {
+            $this->exchangeRate = 1;
+        } else {
+            $exchangeRateController = new ExchangeRate();
+            $this->exchangeRate = $exchangeRateController->getExchangeRate();
+        }
+
+        $this->budgeted = $this->searchFunction($this->yearSearch, 'start_date', 'global_price', $this->stateSearch);
+        $this->budgeted = round($this->budgeted * $this->exchangeRate, 2);
+
+        $this->booked = $this->searchFunction($this->yearSearch, 'start_date', 'committed', $this->stateSearch);
+        $this->booked = round($this->booked * $this->exchangeRate, 2);
+
+        $this->executed = $this->searchFunction($this->yearSearch, 'start_date', 'executed_dollars', $this->stateSearch);
+        $this->executed = round($this->executed * $this->exchangeRate, 2);
+
         $this->total = $this->budgeted;
 
-        $projects = $this->getProjects();
+        $projectsGraph = $this->getProjects();
 
         $data = $this->dataGraph('general_classification');
 
@@ -99,7 +117,9 @@ class TestChart extends Component
         arsort($this->projectsData);
 
         $this->totalsByInvestment = $this->getTotalBySearchParams('investments', $this->yearSearch, $this->stateSearch);
+        arsort($this->totalsByInvestment);
         $this->totalsByState = $this->getTotalBySearchParams('state', $this->yearSearch, $this->stateSearch);
+        arsort($this->totalsByState);
         $this->stateProject = $this->getDiferentValues('state');
 
         $numProjectsByStateGraph = (new ColumnChartModel())
@@ -135,7 +155,7 @@ class TestChart extends Component
         foreach ($this->totalsByInvestment as $label => $value) {
             if ($value === 0) {
             } else {
-                $numProjectsGraphValues->addColumn($label, round($value, 2), $this->colors[$label]);
+                $numProjectsGraphValues->addColumn($label, round($value * $this->exchangeRate, 2), $this->colors[$label]);
             }
         }
 
@@ -153,11 +173,11 @@ class TestChart extends Component
         foreach ($this->totalsByState as $label => $value) {
             if ($value === 0) {
             } else {
-                $numProjectsByStateGraphValues->addColumn($label, round($value, 2), $this->stateColors[$label]);
+                $numProjectsByStateGraphValues->addColumn($label, round($value * $this->exchangeRate, 2), $this->stateColors[$label]);
             }
         }
 
-        $numProjectsGraph = $projects
+        $numProjectsGraph = $projectsGraph
             ->groupBy('investments')
             ->map(function ($data, $type) {
                 return [
@@ -217,7 +237,7 @@ class TestChart extends Component
         foreach ($this->totalsByState as $label => $value) {
             if ($value === 0) {
             } else {
-                $numProjectsPieGraphByInvestmentsValues->addSlice($label, round($value, 2), $this->stateColors[$label] ?? '#333');
+                $numProjectsPieGraphByInvestmentsValues->addSlice($label, round($value * $this->exchangeRate, 2), $this->stateColors[$label] ?? '#333');
             }
         }
 
@@ -240,7 +260,7 @@ class TestChart extends Component
         $areaGraphValues = $area
             ->reduce(
                 function (RadarChartModel $areaGraphValues, $data) {
-                    return $areaGraphValues->addSeries("Investment $", $data->area, round($data->total, 2));
+                    return $areaGraphValues->addSeries("Investment " . (($this->dollarOrEuro === "dollar") ? "$" : "€"), $data->area, round($data->total * $this->exchangeRate, 2));
                 },
                 LivewireCharts::radarChartModel()
                     ->setAnimated($this->firstRun)
@@ -255,11 +275,11 @@ class TestChart extends Component
         foreach ($this->totalsByInvestment as $label => $value) {
             if ($value === 0 || $label === "total") {
             } else {
-                $investmentTypeGraphValues->addSeries("Investment $", $label, round($value, 2));
+                $investmentTypeGraphValues->addSeries("Investment " . (($this->dollarOrEuro === "dollar") ? "$" : "€"), $label, round($value * $this->exchangeRate, 2));
             }
         }
 
-
+        $this->showSpinner =  false;
 
         return view('livewire.test-chart')
             ->with([
@@ -277,15 +297,19 @@ class TestChart extends Component
 
     public function mount()
     {
+        $exchangeRateController = new ExchangeRate();
+
+        $this->exchangeRate = $exchangeRateController->getExchangeRate();
+
         $this->yearSearch = date('Y');
         $this->stateSearch = "all";
         $this->dollarOrEuro = "dollar";
 
         $this->years = $this->getYears();
 
-        $this->budgeted = $this->searchFunction($this->yearSearch, 'start_date', 'global_price');
-        $this->booked = $this->searchFunction($this->yearSearch, 'start_date', 'real_value');
-        $this->executed = $this->searchFunction($this->yearSearch, 'start_date', 'committed');
+        $this->budgeted = $this->searchFunction($this->yearSearch, 'start_date', 'global_price', $this->stateSearch);
+        $this->booked = $this->searchFunction($this->yearSearch, 'start_date', 'real_value', $this->stateSearch);
+        $this->executed = $this->searchFunction($this->yearSearch, 'start_date', 'committed', $this->stateSearch);
 
         $this->total = $this->budgeted;
 
@@ -295,11 +319,27 @@ class TestChart extends Component
 
         $this->projectsPlaned = $this->searchValue($this->yearSearch, 'planification');
 
-        if (is_numeric($this->yearSearch)) {
-            $this->projects = Project::whereYear('start_date', $this->yearSearch)->count();
-        } else {
-            $this->projects = Project::count();
-        }
+        // if (is_numeric($this->yearSearch)) {
+        //     $this->projects = Project::whereYear('start_date', $this->yearSearch)->count();
+        // } else {
+        //     $this->projects = Project::count();
+        // }
+
+        $this->projects =  50;
+
+        // if (is_numeric($this->yearSearch)) {
+        //     $this->projects = Project::whereYear('start_date', $this->yearSearch)
+        //         ->when($this->stateSearch !== 'all', function ($query) {
+        //             return $query->where('state', $this->stateSearch);
+        //         })
+        //         ->count();
+        // } else {
+        //     $this->projects = Project::when($this->stateSearch !== 'all', function ($query) {
+        //         return $query->where('state', $this->stateSearch);
+        //     })
+        //         ->count();
+        // }
+
 
         $this->projectsData = [
             'total' => $this->projects,
@@ -324,22 +364,46 @@ class TestChart extends Component
         return $colorHexadecimal;
     }
 
-    public function searchFunction($yearSearch, $searchLabel, $item)
+    // public function searchFunction($yearSearch, $searchLabel, $item)
+    // {
+    //     if (is_numeric($yearSearch)) {
+    //         // Realiza la conversión y la consulta aquí
+    //         $budgeted = round(Data::whereHas('project', function ($query) use ($yearSearch, $searchLabel) {
+    //             $query->whereYear($searchLabel, intval($yearSearch))
+    //                 ->where('data_uploaded', 1);
+    //         })->sum($item), 2);
+    //     } else {
+    //         // Realiza la consulta sin la condición de año aquí
+    //         $budgeted = round(Data::whereHas('project', function ($query) {
+    //             $query->where('data_uploaded', 1);
+    //         })->sum($item), 2);
+    //     }
+    //     return $budgeted;
+    // }
+
+    public function searchFunction($yearSearch, $searchLabel, $item, $stateSearch = "all")
     {
         if (is_numeric($yearSearch)) {
             // Realiza la conversión y la consulta aquí
-            $budgeted = round(Data::whereHas('project', function ($query) use ($yearSearch, $searchLabel) {
+            $budgeted = round(Data::whereHas('project', function ($query) use ($yearSearch, $searchLabel, $stateSearch) {
                 $query->whereYear($searchLabel, intval($yearSearch))
                     ->where('data_uploaded', 1);
+                if ($stateSearch != "all") {
+                    $query->where('state', $stateSearch);
+                }
             })->sum($item), 2);
         } else {
             // Realiza la consulta sin la condición de año aquí
-            $budgeted = round(Data::whereHas('project', function ($query) {
+            $budgeted = round(Data::whereHas('project', function ($query) use ($stateSearch) {
                 $query->where('data_uploaded', 1);
+                if ($stateSearch != "all") {
+                    $query->where('state', $stateSearch);
+                }
             })->sum($item), 2);
         }
         return $budgeted;
     }
+
 
     public function searchValue($search, $label)
     {
@@ -425,12 +489,37 @@ class TestChart extends Component
             ->get();
     }
 
+    // public function getProjects()
+    // {
+    //     return Project::whereIn('investments', $this->types)
+    //         ->when($this->yearSearch !== 'all', function ($query) {
+    //             return $query->whereYear('start_date', $this->yearSearch);
+    //         })
+    //         ->where(function ($query) {
+    //             // Agregamos una función anónima para aplicar la condición de state si es diferente de "all"
+    //             if ($this->stateSearch !== 'all') {
+    //                 $query->whereHas('data', function ($subquery) {
+    //                     $subquery->where('state', $this->stateSearch);
+    //                 });
+    //             }
+    //         })
+    //         ->get();
+    // }
+
+
     public function getNumTotalOfProjects()
     {
         if (is_numeric($this->yearSearch)) {
-            $projectTotalValue = Project::whereYear('start_date', $this->yearSearch)->count();
+            $projectTotalValue = Project::whereYear('start_date', $this->yearSearch)
+                ->when($this->stateSearch !== 'all', function ($query) {
+                    return $query->where('state', $this->stateSearch);
+                })
+                ->count();
         } else {
-            $projectTotalValue = Project::count();
+            $projectTotalValue = Project::when($this->stateSearch !== 'all', function ($query) {
+                return $query->where('state', $this->stateSearch);
+            })
+                ->count();
         }
 
         return $projectTotalValue;

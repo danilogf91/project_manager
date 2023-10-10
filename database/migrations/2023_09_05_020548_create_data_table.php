@@ -17,24 +17,24 @@ return new class extends Migration
             $table->unsignedBigInteger('project_id');
             $table->string('group_1')->nullable();
             $table->string('group_2')->nullable();
-            $table->string('description')->nullable();
+            $table->string('description', 2000)->nullable();
             $table->string('general_classification')->nullable();
             $table->string('item_type')->nullable();
             $table->string('unit')->nullable();
             $table->integer('qty')->nullable()->unsigned();
-            $table->decimal('unit_price')->nullable();
-            $table->decimal('global_price')->nullable();
+            $table->decimal('unit_price', 18, 2)->nullable();
+            $table->decimal('global_price', 18, 2)->nullable();
             $table->string('stage')->nullable();
-            $table->decimal('real_value')->nullable();
+            $table->decimal('real_value', 18, 2)->nullable();
             $table->decimal('committed')->nullable();
             $table->integer('percentage')->nullable();
-            $table->decimal('executed_dollars')->nullable();
-            $table->decimal('executed_euros')->nullable();
-            $table->string('supplier')->nullable();
-            $table->string('code')->nullable();
+            $table->decimal('executed_dollars', 18, 2)->nullable();
+            $table->decimal('executed_euros', 18, 2)->nullable();
+            $table->string('supplier', 500)->nullable();
+            $table->string('code', 500)->nullable();
             $table->string('order_no')->nullable();
             $table->string('input_num')->nullable();
-            $table->string('observations')->nullable();
+            $table->string('observations', 2000)->nullable();
             $table->timestamps();
 
             $table->foreign('project_id') // Define la clave foránea

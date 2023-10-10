@@ -10,13 +10,11 @@ use Livewire\Attributes\Rule;
 class EditData extends Component
 {
     public $search = '';
-
     public $openModal = false;
     public $data;
     public $values;
     public $projectId;
-
-    public $rateEuros = 100;
+    public $rateEuros = 1;
 
     #[Rule('required|string|max:255')]
     public $area;
@@ -39,7 +37,6 @@ class EditData extends Component
     #[Rule('required|numeric|min:0')]
     public $unit_price;
 
-    #[Rule('required|numeric|min:0')]
     public $global_price;
 
     #[Rule('required|string|max:255')]
@@ -54,9 +51,6 @@ class EditData extends Component
     #[Rule('required|numeric|between:0,100')]
     public $percentage;
 
-    #[Rule('required|string|max:500')]
-    public $supplier;
-
     #[Rule('nullable|string|max:500')]
     public $code;
 
@@ -66,10 +60,10 @@ class EditData extends Component
     #[Rule('nullable|string|max:255')]
     public $input_num;
 
-    #[Rule('nullable|string')]
+    #[Rule('nullable|string|max:2000')]
     public $observations;
 
-    #[Rule('nullable|string')]
+    #[Rule('nullable|string|max:2000')]
     public $description;
 
     public function mount(Data $data)
@@ -88,13 +82,11 @@ class EditData extends Component
         $this->real_value = $data->real_value;
         $this->committed = $data->committed;
         $this->percentage = $data->percentage;
-        $this->supplier = $data->supplier;
         $this->code = $data->code;
         $this->order_no = $data->order_no;
         $this->input_num = $data->input_num;
         $this->description = $data->description;
         $this->observations = $data->observations;
-
         $id = $this->projectId;
 
         $this->rateEuros = Project::whereHas('data', function ($query) use ($id) {
@@ -104,8 +96,7 @@ class EditData extends Component
 
     public function update(Data $projectData)
     {
-        //$this->validate();
-
+        $this->validate();
         $projectData->area = $this->area;
         $projectData->group_1 = $this->group_1;
         $projectData->group_2 = $this->group_2;
@@ -120,7 +111,6 @@ class EditData extends Component
         $projectData->percentage = $this->percentage;
         $projectData->executed_dollars = ($this->percentage * ($this->qty * $this->unit_price) / 100);
         $projectData->executed_euros = ($this->percentage * ($this->qty * $this->unit_price * $this->rateEuros) / 100);
-        $projectData->supplier = $this->supplier;
         $projectData->code = $this->code;
         $projectData->order_no = $this->order_no;
         $projectData->input_num = $this->input_num;

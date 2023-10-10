@@ -6,11 +6,15 @@
                 name="searchData"
                 class="text-center px-7 py-2 w-full border rounded"
             >
-                @foreach($columnNames as $columnName)
-                <option value="{{ $columnName }}">
-                    {{ $columnName }}
-                </option>
-                @endforeach
+            @foreach($columnNames as $columnName)
+            @php
+                $transformedColumnName = $this->formatText($columnName);
+            @endphp
+            <option value="{{ $columnName }}">
+                {{ $transformedColumnName }}
+            </option>
+            @endforeach
+
             </select>
         </div>
 
@@ -21,16 +25,16 @@
                 class="text-center px-7 py-2 w-full border rounded"
             >
                 <option value="global_price">
-                    global_price
+                    Global Price
                 </option>
                 <option value="real_value">
-                    real_value
+                    Real value
                 </option>
                 <option value="committed">
-                    committed
+                    Committed
                 </option>
                 <option value="executed_dollars">
-                    executed_dollars
+                    Executed Dollars
                 </option>
             </select>
         </div>

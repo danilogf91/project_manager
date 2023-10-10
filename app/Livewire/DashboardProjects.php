@@ -32,6 +32,8 @@ class DashboardProjects extends Component
     public $booked = 0;
     public $executed = 0;
 
+    public $testValueErase = [];
+
     public function generateColor()
     {
         // Genera tres valores hexadecimales aleatorios para los componentes rojo, verde y azul
@@ -49,7 +51,6 @@ class DashboardProjects extends Component
     {
         $this->project = $project;
         $this->total = round(Data::where('project_id', $this->project->id)->sum('global_price'), 2);
-        // $this->executed_dollars = round(Data::where('project_id', $this->project->id)->sum('executed_dollars'), 2);
         $this->real_value = round(Data::where('project_id', $this->project->id)->sum('real_value'), 2);
         $this->committed = round(Data::where('project_id', $this->project->id)->sum('committed'), 2);
         $this->global_price = round(Data::where('project_id', $this->project->id)->sum('global_price'), 2);
@@ -79,62 +80,71 @@ class DashboardProjects extends Component
             ->groupBy($this->searchData)
             ->get();
 
+        $searchValue = $this->searchData;
+
+        $area = $area->map(function ($item) use ($searchValue) {
+            return [
+                $searchValue => $item->$searchValue,
+                'total' => floatval($item->total),
+            ];
+        });
+
         $area = $area->sortByDesc('total');
 
-        $radarChartModel = $area
-            ->reduce(
-                function (RadarChartModel $radarChartModel, $data) {
-                    return $radarChartModel->addSeries($data->first()->{$this->searchData}, $data->{$this->searchData}, round($data->total, 2));
-                },
-                LivewireCharts::radarChartModel()
-                    ->setTitle($this->searchData . " " . $this->investments)
-                    ->setAnimated($this->firstRun)
-                    ->withOnPointClickEvent('onPointClick')
-                    ->withGrid()
-                    // ->withDataLabels()
-                    ->withLegend()
-                    ->legendPositionTop()
-            );
+        $this->testValueErase = $area;
 
-        $columnChartModel =  $area
-            ->reduce(
-                function (ColumnChartModel $colChartModel, $data) {
-                    $type = $data->{$this->searchData};
-                    $value = $data->total;
+        $radarChartModel = LivewireCharts::radarChartModel()
+            ->setTitle($this->searchData . " " . $this->investments)
+            ->setAnimated($this->firstRun)
+            ->withOnPointClickEvent('onPointClick')
+            ->withGrid()
+            // ->withDataLabels()
+            ->withLegend()
+            ->legendPositionTop();
 
-                    return $colChartModel->addColumn($type, round($value, 2), $this->generateColor() ?? '#4bc0c0');
-                },
-                (new ColumnChartModel())
-                    // ->addColumn('Total', $this->total, $this->generateColor())
-                    ->withOnColumnClickEventName('onColumnClick')
-                    ->setTitle($this->searchData . " " . $this->investments)
-                    ->setAnimated($this->firstRun)
-                    ->setLegendVisibility(true)
-                    ->withGrid()
-                    ->withDataLabels()
-                    ->withLegend()
-                    ->legendPositionTop()
-                    ->setDataLabelsEnabled(true)
-            );
+        foreach ($this->testValueErase as $element) {
+            if (is_numeric($element['total']) && !is_nan($element['total']) && $element['total'] > 0 && $element[$this->searchData] != null) {
+                $radarChartModel->addSeries("Investment", $element[$this->searchData], $element['total']);
+            }
+        }
 
-        $pieChartModel =  $area
-            ->reduce(
-                function (PieChartModel $pieChartModel, $data) {
-                    $type = $data->{$this->searchData};
-                    $value = round($data->total, 2);
+        $columnChartModel =
+            (new ColumnChartModel())
+            // ->addColumn('Total', $this->total, $this->generateColor())
+            ->withOnColumnClickEventName('onColumnClick')
+            ->setTitle($this->searchData . " " . $this->investments)
+            ->setAnimated($this->firstRun)
+            ->setLegendVisibility(true)
+            ->withGrid()
+            ->withDataLabels()
+            ->withLegend()
+            ->legendPositionTop()
+            ->setDataLabelsEnabled(true);
 
-                    return $pieChartModel->addSlice($type, $value, $this->generateColor());
-                },
-                (new PieChartModel())
-                    ->setTitle($this->searchData . " " . $this->investments)
-                    ->setAnimated($this->firstRun)
-                    ->setLegendVisibility(true)
-                    ->withOnSliceClickEvent('onSliceClick')
-                    ->withGrid()
-                    ->withDataLabels()
-                    ->withLegend()
-                    ->setType('donut')
-            );
+        foreach ($area as $element) {
+            if (is_numeric($element['total']) && !is_nan($element['total']) && $element['total'] > 0 && $element[$this->searchData] != null) {
+                $columnChartModel->addColumn($element[$this->searchData], $element['total'], $this->generateColor());
+            }
+        }
+
+        $pieChartModel =
+            (new PieChartModel())
+            ->setTitle($this->searchData . " " . $this->investments)
+            ->setAnimated($this->firstRun)
+            ->setLegendVisibility(true)
+            ->withOnSliceClickEvent('onSliceClick')
+            ->withGrid()
+            ->withDataLabels()
+            ->withLegend()
+            ->setType('donut');
+
+
+        foreach ($this->testValueErase as $element) {
+            if (is_numeric($element['total']) && !is_nan($element['total']) && $element['total'] > 0 && $element[$this->searchData] != null) {
+                $pieChartModel->addSlice($element[$this->searchData], $element['total'], $this->generateColor());
+            }
+        }
+
 
         $values = $dataQuery->select(
             $this->searchData,
@@ -148,8 +158,15 @@ class DashboardProjects extends Component
 
         $multiColumnChartModel = $values
             ->reduce(
+
                 function ($multiColumnChartModel, $data) {
                     $type = $data->{$this->searchData};
+
+                    // Verifica si $type es null y omite la iteración si es el caso
+                    if ($type === null) {
+                        return $multiColumnChartModel;
+                    }
+
                     $value1 = $data->total1;
                     $value2 = $data->total2;
                     $value3 = $data->total3;
@@ -172,7 +189,6 @@ class DashboardProjects extends Component
                     ->legendPositionTop()
             );
 
-
         return view('livewire.dashboard-projects')
             ->with([
                 'radarChartModel' => $radarChartModel,
@@ -180,5 +196,19 @@ class DashboardProjects extends Component
                 'pieChartModel' => $pieChartModel,
                 'multiColumnChartModel' => $multiColumnChartModel,
             ]);
+    }
+
+    public function formatText($texto)
+    {
+        // Elimina guiones bajos y convierte el texto en un array de palabras
+        $palabras = explode('_', $texto);
+
+        // Convierte la primera letra de cada palabra en mayúscula
+        $palabras = array_map('ucfirst', $palabras);
+
+        // Une las palabras nuevamente en un solo string
+        $textoTransformado = implode(' ', $palabras);
+
+        return $textoTransformado;
     }
 }
