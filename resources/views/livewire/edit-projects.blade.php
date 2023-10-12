@@ -46,6 +46,34 @@
                     <x-input-error for='pda_code'/>
                 </div>
 
+                <div class="col-span-3">
+
+
+                    <label
+                        htmlFor="classification_of_investments"
+                        class="block text-sm font-medium"
+                    >
+                        Classification of Investments
+                    </label>
+                    <select
+                        wire:model.live="classification_of_investments"
+                        name="classification_of_investments"
+                        class="mt-1 p-2 w-full border rounded"
+                    >
+                        <option value="Buildings">Buildings</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="General Install">General Install</option>
+                        <option value="Land">Land</option>
+                        <option value="Machines & Equipm">Machines & Equipm</option>
+                        <option value="Office Hardware Software">Office Hardware Software</option>
+                        <option value="Other">Other</option>
+                        <option value="Vehicles">Vehicles</option>
+                        <option value="Vessel & Fishing Equipment">Vessel & Fishing Equipment</option>
+                        <option value="Warenhouse & Distrib">Warenhouse & Distrib</option>
+                    </select>
+                    <x-input-error for='classification_of_investments'/>
+                </div>
+
                 <div class="md:col-span-1 col-span-3">
                     <label
                         htmlFor="rate"
@@ -76,11 +104,11 @@
                         name="state"
                         class="mt-1 p-2 w-full border rounded"
                     >
-                        <option value="planification">
+                        <option value="Planification">
                             Planification
                         </option>
-                        <option value="execution">Execution</option>
-                        <option value="finished">Finished</option>
+                        <option value="Execution">Execution</option>
+                        <option value="Finished">Finished</option>
                     </select>
                     <x-input-error for='planification'/>
                 </div>
@@ -97,22 +125,22 @@
                         name="investments"
                         class="mt-1 p-2 w-full border rounded"
                     >
-                        <option value="innovation">Innovation</option>
-                        <option value="efficiency_&_saving">
+                        <option value="Innovation">Innovation</option>
+                        <option value="Efficiency & Saving">
                             Efficiency & Saving
                         </option>
-                        <option value="replacement_&_restructuring">
+                        <option value="Replacement & Restructuring">
                             Replacement & Restructuring
                         </option>
-                        <option value="quality_&_hygiene">
+                        <option value="Quality & Hygiene">
                             Quality & Hygiene
                         </option>
-                        <option value="health_&_safety">
+                        <option value="Health & Safety">
                             Health & Safety
                         </option>
-                        <option value="environment">Environment</option>
-                        <option value="maintenance">Maintenance</option>
-                        <option value="capacity_increase">
+                        <option value="Environment">Environment</option>
+                        <option value="Maintenance">Maintenance</option>
+                        <option value="Capacity Increase">
                             Capacity Increase
                         </option>
                     </select>
@@ -131,10 +159,10 @@
                         name="justification"
                         class="mt-1 p-2 w-full border rounded"
                     >
-                        <option value="normal_capex">
+                        <option value="Normal Capex">
                             Normal Capex
                         </option>
-                        <option value="special_project">
+                        <option value="Special Project">
                             Special Project
                         </option>
                     </select>
@@ -156,7 +184,7 @@
                     />
                     <x-input-error for='start_date'/>
                 </div>
-                
+
                 <div class="md:col-span-1 col-span-3">
                     <label
                         htmlFor="finish_date"

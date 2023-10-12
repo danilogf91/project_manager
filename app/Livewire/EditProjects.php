@@ -19,19 +19,22 @@ class EditProjects extends Component
     #[Rule('required|numeric|min:0|max:1000')]
     public $rate;
 
-    #[Rule('required|in:planification,execution,finished|string|max:255')]
-    public $state = 'planification';
+    #[Rule('required|in:Planification,Execution,Finished|string|max:255')]
+    public $state = 'Planification';
 
-    #[Rule('required|in:innovation,efficiency_&_saving,replacement_&_restructuring,quality_&_hygiene,health_&_safety,environment,maintenance,capacity_increase|string|max:255')]
-    public $investments = 'innovation';
+    #[Rule('required|in:Innovation,Efficiency & Saving,Replacement & Restructuring,Quality & Hygiene,Health & Safety,Environment,Maintenance,Capacity Increase|string|max:255')]
+    public $investments = 'Innovation';
 
-    #[Rule('required|in:normal_capex,special_project|string|max:255')]
-    public $justification = 'normal_capex';
+    #[Rule('required|in:Buildings,Furniture,General Install,Land,Machines & Equipm,Office Hardware Software,Other,Vehicles,Vessel & Fishing Equipment,Warenhouse & Distrib|string|max:255')]
+    public $classification_of_investments = 'Buildings';
+
+    #[Rule('required|in:Normal Capex,Special Project|string|max:255')]
+    public $justification = 'Normal Capex';
 
     #[Rule('required|date|before:finish_date')]
     public $start_date;
 
-    #[Rule('required|date')]
+    #[Rule('required|date|after:start_date')]
     public $finish_date;
 
     public function mount(Project $project)
@@ -42,6 +45,7 @@ class EditProjects extends Component
         $this->rate = $project->rate;
         $this->state = $project->state;
         $this->investments = $project->investments;
+        $this->classification_of_investments = $project->classification_of_investments;
         $this->justification = $project->justification;
         $this->start_date = date("Y-m-d", strtotime($project->start_date));
         $this->finish_date = date("Y-m-d", strtotime($project->finish_date));
@@ -57,6 +61,7 @@ class EditProjects extends Component
         $project->rate = $this->rate;
         $project->state = $this->state;
         $project->investments = $this->investments;
+        $project->classification_of_investments = $this->classification_of_investments;
         $project->justification = $this->justification;
         $project->start_date = $this->start_date;
         $project->finish_date = $this->finish_date;

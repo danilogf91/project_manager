@@ -41,7 +41,7 @@
                 class="text-center px-7 py-2 w-full border rounded"
             >
                 <option value="all">
-                    all
+                    All
                 </option>
                 @foreach($stateProject as $state)
                 <option value="{{ $state }}">

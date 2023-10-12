@@ -95,7 +95,7 @@
                                 <th wire:click="setSortBy('global_price')" scope="col" class=" cursor-pointer hover:bg-gray-200 px-1 py-1">global price</th>
                                 <th wire:click="setSortBy('stage')" scope="col" class=" cursor-pointer hover:bg-gray-200 px-1 py-1">stage</th>
                                 <th wire:click="setSortBy('real_value')" scope="col" class=" cursor-pointer hover:bg-gray-200 px-1 py-1">real</th>
-                                <th wire:click="setSortBy('committed')" scope="col" class=" cursor-pointer hover:bg-gray-200 px-1 py-1">committed</th>
+                                <th wire:click="setSortBy('booked')" scope="col" class=" cursor-pointer hover:bg-gray-200 px-1 py-1">booked</th>
                                 <th wire:click="setSortBy('percentage')" scope="col" class=" cursor-pointer hover:bg-gray-200 px-1 py-1">percentage</th>
                                 <th wire:click="setSortBy('supplier')" scope="col" class=" cursor-pointer hover:bg-gray-200 px-1 py-1">supplier</th>
                                 <th wire:click="setSortBy('code')" scope="col" class=" cursor-pointer hover:bg-gray-200 px-1 py-1">code</th>
@@ -130,7 +130,7 @@
                                 <td class="text-xs px-1 py-1">{{ $item->global_price }}</td>
                                 <td class="text-xs px-1 py-1">{{ $item->stage }}</td>
                                 <td class="text-xs px-1 py-1">{{ $item->real_value }}</td>
-                                <td class="text-xs px-1 py-1">{{ $item->committed }}</td>
+                                <td class="text-xs px-1 py-1">{{ $item->booked }}</td>
                                 <td class="text-xs px-1 py-1">{{ $item->percentage }}</td>
                                 <td class="text-xs px-1 py-1">{{ $item->supplier }}</td>
                                 <td class="text-xs px-1 py-1">{{ $item->code }}</td>

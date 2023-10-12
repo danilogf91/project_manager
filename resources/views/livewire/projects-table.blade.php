@@ -79,6 +79,7 @@
                                 <th wire:click="setSortBy('rate')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">rate</th>
                                 <th wire:click="setSortBy('state')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">state</th>
                                 <th wire:click="setSortBy('investments')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">investments</th>
+                                <th wire:click="setSortBy('classification_of_investments')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">classification_of_investments</th>
                                 <th wire:click="setSortBy('justification')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">justification</th>
                                 <th wire:click="setSortBy('start_date')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">start date</th>
                                 <th wire:click="setSortBy('finish_date')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">finish date</th>
@@ -129,6 +130,7 @@
                                 <td class="px-2 py-1">{{ $project->rate }}</td>
                                 <td class="px-2 py-1">{{ $project->state }}</td>
                                 <td class="px-2 py-1">{{ $project->investments }}</td>
+                                <td class="px-2 py-1">{{ $project->classification_of_investments }}</td>
                                 <td class="px-2 py-1">{{ $project->justification }}</td>
                                 <td class="px-2 py-1">{{ $project->start_date }}</td>
                                 <td class="px-2 py-1">{{ $project->finish_date }}</td>

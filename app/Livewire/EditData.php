@@ -46,7 +46,7 @@ class EditData extends Component
     public $real_value;
 
     #[Rule('required|numeric|min:0')]
-    public $committed;
+    public $booked;
 
     #[Rule('required|numeric|between:0,100')]
     public $percentage;
@@ -80,7 +80,7 @@ class EditData extends Component
         $this->global_price = $data->global_price;
         $this->stage = $data->stage;
         $this->real_value = $data->real_value;
-        $this->committed = $data->committed;
+        $this->booked = $data->booked;
         $this->percentage = $data->percentage;
         $this->code = $data->code;
         $this->order_no = $data->order_no;
@@ -105,9 +105,12 @@ class EditData extends Component
         $projectData->qty = $this->qty;
         $projectData->unit_price = $this->unit_price;
         $projectData->global_price = ($this->qty * $this->unit_price);
+        $projectData->global_price_euros = ($this->global_price * $this->rateEuros);
         $projectData->stage = $this->stage;
         $projectData->real_value = $this->real_value;
-        $projectData->committed = $this->committed;
+        $projectData->real_value_euros = ($this->real_value * $this->rateEuros);
+        $projectData->booked = $this->booked;
+        $projectData->booked_euros = ($this->booked * $this->rateEuros);
         $projectData->percentage = $this->percentage;
         $projectData->executed_dollars = ($this->percentage * ($this->qty * $this->unit_price) / 100);
         $projectData->executed_euros = ($this->percentage * ($this->qty * $this->unit_price * $this->rateEuros) / 100);

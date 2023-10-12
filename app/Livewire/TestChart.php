@@ -19,39 +19,39 @@ class TestChart extends Component
     public $showDataLabels = true;
 
     public $types = [
-        'innovation',
-        'efficiency_&_saving',
-        'replacement_&_restructuring',
-        'quality_&_hygiene',
-        'health_&_safety',
-        'environment',
-        'maintenance',
-        'capacity_increase'
+        'Innovation',
+        'Efficiency & Saving',
+        'Replacement & Restructuring',
+        'Quality & Hygiene',
+        'Health & Safety',
+        'Environment',
+        'Maintenance',
+        'Capacity Increase'
     ];
 
     public $stateColors = [
-        'execution' => '#5BCA5A',
-        'total' => '#800080',
-        'planification' => '#FFA500',
-        'finished' => '#CC5555',
+        'Execution' => '#5BCA5A',
+        'Finished' => '#CC5555',
+        'Planification' => '#FFA500',
+        'Total' => '#800080',
     ];
 
     public $states = [
-        'execution',
-        'finished',
-        'planification',
-        'total',
+        'Execution',
+        'Finished',
+        'Planification',
+        'Total',
     ];
 
     public $colors = [
-        'innovation' => '#f6ad55',
-        'efficiency_&_saving' => '#fc8181',
-        'replacement_&_restructuring' => '#90cdf4',
-        'quality_&_hygiene' => '#66DA26',
-        'health_&_safety' => '#ffce56',
-        'environment' => '#4bc0c0',
-        'maintenance' => '#36a2eb',
-        'capacity_increase' => '#9966FF',
+        'Innovation' => '#f6ad55',
+        'Efficiency & Saving' => '#fc8181',
+        'Replacement & Restructuring' => '#90cdf4',
+        'Quality & Hygiene' => '#66DA26',
+        'Health & Safety' => '#ffce56',
+        'Environment' => '#4bc0c0',
+        'Maintenance' => '#36a2eb',
+        'Capacity Increase' => '#9966FF',
     ];
 
     public $budgeted = 0;
@@ -90,7 +90,7 @@ class TestChart extends Component
         $this->budgeted = $this->searchFunction($this->yearSearch, 'start_date', 'global_price', $this->stateSearch);
         $this->budgeted = round($this->budgeted * $this->exchangeRate, 2);
 
-        $this->booked = $this->searchFunction($this->yearSearch, 'start_date', 'committed', $this->stateSearch);
+        $this->booked = $this->searchFunction($this->yearSearch, 'start_date', 'booked', $this->stateSearch);
         $this->booked = round($this->booked * $this->exchangeRate, 2);
 
         $this->executed = $this->searchFunction($this->yearSearch, 'start_date', 'executed_dollars', $this->stateSearch);
@@ -102,15 +102,8 @@ class TestChart extends Component
 
         $data = $this->dataGraph('general_classification');
 
-        $area = Project::select('data.area')
-            ->addSelect(DB::raw('SUM(data.global_price) as total'))
-            ->leftJoin('data', 'projects.id', '=', 'data.project_id')
-            ->when($this->stateSearch !== 'all', function ($query) {
-                return $query->where('projects.state', $this->stateSearch);
-            })
-            ->groupBy('data.area')
-            ->distinct() // Aplicar el método distinct
-            ->get();
+        $area = $this->getAreaData();
+
 
         $this->projectsData = $this->getProjectsData();
 
@@ -121,61 +114,6 @@ class TestChart extends Component
         $this->totalsByState = $this->getTotalBySearchParams('state', $this->yearSearch, $this->stateSearch);
         arsort($this->totalsByState);
         $this->stateProject = $this->getDiferentValues('state');
-
-        $numProjectsByStateGraph = (new ColumnChartModel())
-            ->setTitle('Projects')
-            ->setAnimated($this->firstRun)
-            ->withOnColumnClickEventName('onColumnClick')
-            ->setLegendVisibility(true)
-            ->setColumnWidth(80)
-            ->withGrid()
-            ->withDataLabels()
-            ->withLegend()
-            ->setDataLabelsEnabled($this->showDataLabels);
-
-        foreach ($this->projectsData as $label => $value) {
-            if ($value === 0) {
-            } else {
-                $numProjectsByStateGraph->addColumn($label, $value, $this->stateColors[$label]);
-            }
-        }
-
-        $numProjectsGraphValues = (new ColumnChartModel())
-            ->setTitle('Projects')
-            ->setAnimated($this->firstRun)
-            ->withOnColumnClickEventName('onColumnClick')
-            ->setLegendVisibility(true)
-            ->setColumnWidth(80)
-            ->withGrid()
-            ->withDataLabels()
-            ->withLegend()
-            ->setHorizontal(true)
-            ->setDataLabelsEnabled($this->showDataLabels);
-
-        foreach ($this->totalsByInvestment as $label => $value) {
-            if ($value === 0) {
-            } else {
-                $numProjectsGraphValues->addColumn($label, round($value * $this->exchangeRate, 2), $this->colors[$label]);
-            }
-        }
-
-        $numProjectsByStateGraphValues = (new ColumnChartModel())
-            ->setTitle('Projects')
-            ->setAnimated($this->firstRun)
-            ->withOnColumnClickEventName('onColumnClick')
-            ->setLegendVisibility(true)
-            ->setColumnWidth(80)
-            ->withGrid()
-            ->withDataLabels()
-            ->withLegend()
-            ->setDataLabelsEnabled($this->showDataLabels);
-
-        foreach ($this->totalsByState as $label => $value) {
-            if ($value === 0) {
-            } else {
-                $numProjectsByStateGraphValues->addColumn($label, round($value * $this->exchangeRate, 2), $this->stateColors[$label]);
-            }
-        }
 
         $numProjectsGraph = $projectsGraph
             ->groupBy('investments')
@@ -194,7 +132,7 @@ class TestChart extends Component
                     return $numProjectsGraph->addColumn($type, round($value, 2), $this->colors[$type]);
                 },
                 (new ColumnChartModel())
-                    ->setTitle('# de Projects')
+                    // ->setTitle('#')
                     ->setAnimated($this->firstRun)
                     ->withOnColumnClickEventName('onColumnClick')
                     ->setLegendVisibility(true)
@@ -206,8 +144,28 @@ class TestChart extends Component
                     ->setDataLabelsEnabled($this->showDataLabels)
             );
 
+        $numProjectsGraphValues = (new ColumnChartModel())
+            // ->setTitle('Projects borrar')
+            ->setAnimated($this->firstRun)
+            ->withOnColumnClickEventName('onColumnClick')
+            ->setLegendVisibility(true)
+            ->setColumnWidth(80)
+            ->withGrid()
+            ->withDataLabels()
+            ->withLegend()
+            ->setHorizontal(true)
+            ->setDataLabelsEnabled($this->showDataLabels);
+
+
+        foreach ($this->totalsByInvestment as $label => $value) {
+            if ($value === 0) {
+            } else {
+                $numProjectsGraphValues->addColumn($label, round($value * $this->exchangeRate, 2), $this->colors[$label]);
+            }
+        }
+
         $pieChartModel = $data
-            ->sortByDesc('total')
+            ->sortByDesc('Total')
             ->reduce(
                 function (PieChartModel $pieChartModel, $data) {
                     $type = $data->general_classification;
@@ -226,7 +184,7 @@ class TestChart extends Component
             );
 
         $numProjectsPieGraphByInvestmentsValues = (new PieChartModel())
-            ->setTitle('Projects by Investments')
+            ->setTitle('Project status $')
             ->setAnimated($this->firstRun)
             ->setLegendVisibility(true)
             ->withGrid()
@@ -242,7 +200,7 @@ class TestChart extends Component
         }
 
         $numProjectsPieGraphByInvestments = (new PieChartModel())
-            ->setTitle('# Projects by Investments')
+            ->setTitle('Project status %')
             ->setAnimated($this->firstRun)
             ->setLegendVisibility(true)
             ->withGrid()
@@ -257,6 +215,42 @@ class TestChart extends Component
             }
         }
 
+        $numProjectsByStateGraph = (new ColumnChartModel())
+            ->setTitle('Project status #')
+            ->setAnimated($this->firstRun)
+            ->withOnColumnClickEventName('onColumnClick')
+            ->setLegendVisibility(true)
+            ->setColumnWidth(80)
+            ->withGrid()
+            ->withDataLabels()
+            ->withLegend()
+            ->setDataLabelsEnabled($this->showDataLabels);
+
+        foreach ($this->projectsData as $label => $value) {
+            if ($value === 0) {
+            } else {
+                $numProjectsByStateGraph->addColumn($label, $value, $this->stateColors[$label]);
+            }
+        }
+
+        $numProjectsByStateGraphValues = (new ColumnChartModel())
+            ->setTitle('Project status $')
+            ->setAnimated($this->firstRun)
+            ->withOnColumnClickEventName('onColumnClick')
+            ->setLegendVisibility(true)
+            ->setColumnWidth(80)
+            ->withGrid()
+            ->withDataLabels()
+            ->withLegend()
+            ->setDataLabelsEnabled($this->showDataLabels);
+
+        foreach ($this->totalsByState as $label => $value) {
+            if ($value === 0) {
+            } else {
+                $numProjectsByStateGraphValues->addColumn($label, round($value * $this->exchangeRate, 2), $this->stateColors[$label]);
+            }
+        }
+
         $areaGraphValues = $area
             ->reduce(
                 function (RadarChartModel $areaGraphValues, $data) {
@@ -264,8 +258,10 @@ class TestChart extends Component
                 },
                 LivewireCharts::radarChartModel()
                     ->setAnimated($this->firstRun)
-                    ->setTitle('Investments by Area')
+                    ->setTitle('Area Clasification')
             );
+
+        // dd($area);
 
 
         $investmentTypeGraphValues = LivewireCharts::radarChartModel()
@@ -309,7 +305,7 @@ class TestChart extends Component
 
         $this->budgeted = $this->searchFunction($this->yearSearch, 'start_date', 'global_price', $this->stateSearch);
         $this->booked = $this->searchFunction($this->yearSearch, 'start_date', 'real_value', $this->stateSearch);
-        $this->executed = $this->searchFunction($this->yearSearch, 'start_date', 'committed', $this->stateSearch);
+        $this->executed = $this->searchFunction($this->yearSearch, 'start_date', 'booked', $this->stateSearch);
 
         $this->total = $this->budgeted;
 
@@ -319,33 +315,13 @@ class TestChart extends Component
 
         $this->projectsPlaned = $this->searchValue($this->yearSearch, 'planification');
 
-        // if (is_numeric($this->yearSearch)) {
-        //     $this->projects = Project::whereYear('start_date', $this->yearSearch)->count();
-        // } else {
-        //     $this->projects = Project::count();
-        // }
-
         $this->projects =  50;
 
-        // if (is_numeric($this->yearSearch)) {
-        //     $this->projects = Project::whereYear('start_date', $this->yearSearch)
-        //         ->when($this->stateSearch !== 'all', function ($query) {
-        //             return $query->where('state', $this->stateSearch);
-        //         })
-        //         ->count();
-        // } else {
-        //     $this->projects = Project::when($this->stateSearch !== 'all', function ($query) {
-        //         return $query->where('state', $this->stateSearch);
-        //     })
-        //         ->count();
-        // }
-
-
         $this->projectsData = [
-            'total' => $this->projects,
-            'execution' => $this->projectsExecuted,
-            'planification' => $this->projectsPlaned,
-            'finished' => $this->projectsFinished,
+            'Total' => $this->projects,
+            'Execution' => $this->projectsExecuted,
+            'Planification' => $this->projectsPlaned,
+            'Finished' => $this->projectsFinished,
         ];
 
         arsort($this->projectsData);
@@ -363,23 +339,6 @@ class TestChart extends Component
 
         return $colorHexadecimal;
     }
-
-    // public function searchFunction($yearSearch, $searchLabel, $item)
-    // {
-    //     if (is_numeric($yearSearch)) {
-    //         // Realiza la conversión y la consulta aquí
-    //         $budgeted = round(Data::whereHas('project', function ($query) use ($yearSearch, $searchLabel) {
-    //             $query->whereYear($searchLabel, intval($yearSearch))
-    //                 ->where('data_uploaded', 1);
-    //         })->sum($item), 2);
-    //     } else {
-    //         // Realiza la consulta sin la condición de año aquí
-    //         $budgeted = round(Data::whereHas('project', function ($query) {
-    //             $query->where('data_uploaded', 1);
-    //         })->sum($item), 2);
-    //     }
-    //     return $budgeted;
-    // }
 
     public function searchFunction($yearSearch, $searchLabel, $item, $stateSearch = "all")
     {
@@ -489,24 +448,6 @@ class TestChart extends Component
             ->get();
     }
 
-    // public function getProjects()
-    // {
-    //     return Project::whereIn('investments', $this->types)
-    //         ->when($this->yearSearch !== 'all', function ($query) {
-    //             return $query->whereYear('start_date', $this->yearSearch);
-    //         })
-    //         ->where(function ($query) {
-    //             // Agregamos una función anónima para aplicar la condición de state si es diferente de "all"
-    //             if ($this->stateSearch !== 'all') {
-    //                 $query->whereHas('data', function ($subquery) {
-    //                     $subquery->where('state', $this->stateSearch);
-    //                 });
-    //             }
-    //         })
-    //         ->get();
-    // }
-
-
     public function getNumTotalOfProjects()
     {
         if (is_numeric($this->yearSearch)) {
@@ -527,32 +468,46 @@ class TestChart extends Component
 
     public function getProjectsData()
     {
-        $projectsFinishedValue = $this->searchValue($this->yearSearch, 'finished');
-        $projectsExecutedValue = $this->searchValue($this->yearSearch, 'execution');
-        $projectsPlanedValue = $this->searchValue($this->yearSearch, 'planification');
+        $projectsFinishedValue = $this->searchValue($this->yearSearch, 'Finished');
+        $projectsExecutedValue = $this->searchValue($this->yearSearch, 'Execution');
+        $projectsPlanedValue = $this->searchValue($this->yearSearch, 'Planification');
 
         $this->projects = $this->getNumTotalOfProjects();
 
         if ($this->stateSearch === "all") {
             $projectsData = [
-                'total' => $this->projects,
-                'execution' => $projectsExecutedValue,
-                'planification' => $projectsPlanedValue,
-                'finished' => $projectsFinishedValue
+                'Total' => $this->projects,
+                'Execution' => $projectsExecutedValue,
+                'Planification' => $projectsPlanedValue,
+                'Finished' => $projectsFinishedValue
             ];
-        } else if ($this->stateSearch === "execution") {
+        } else if ($this->stateSearch === "Execution") {
             $projectsData = [
-                'execution' => $projectsExecutedValue,
+                'Execution' => $projectsExecutedValue,
             ];
-        } else if ($this->stateSearch === "planification") {
+        } else if ($this->stateSearch === "Planification") {
             $projectsData = [
-                'planification' => $projectsPlanedValue,
+                'Planification' => $projectsPlanedValue,
             ];
-        } else if ($this->stateSearch === "finished") {
+        } else if ($this->stateSearch === "Finished") {
             $projectsData = [
-                'finished' => $projectsFinishedValue
+                'Finished' => $projectsFinishedValue
             ];
         }
         return $projectsData;
+    }
+
+    public function getAreaData()
+    {
+        return Project::select('data.area')
+            ->addSelect(DB::raw('SUM(data.global_price) as total'))
+            ->leftJoin('data', 'projects.id', '=', 'data.project_id')
+            ->where('projects.data_uploaded', 1) // Agregar esta condición
+            ->when($this->stateSearch !== 'all', function ($query) {
+                return $query->where('projects.state', $this->stateSearch);
+            })
+            ->groupBy('data.area')
+            ->distinct()
+            ->get();
     }
 }

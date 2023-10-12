@@ -52,11 +52,11 @@ class DashboardProjects extends Component
         $this->project = $project;
         $this->total = round(Data::where('project_id', $this->project->id)->sum('global_price'), 2);
         $this->real_value = round(Data::where('project_id', $this->project->id)->sum('real_value'), 2);
-        $this->committed = round(Data::where('project_id', $this->project->id)->sum('committed'), 2);
+        $this->committed = round(Data::where('project_id', $this->project->id)->sum('booked'), 2);
         $this->global_price = round(Data::where('project_id', $this->project->id)->sum('global_price'), 2);
 
         $this->budgeted = round(Data::where('project_id', $this->project->id)->sum('global_price'), 2);
-        $this->booked = round(Data::where('project_id', $this->project->id)->sum('committed'), 2);
+        $this->booked = round(Data::where('project_id', $this->project->id)->sum('booked'), 2);
         $this->executed = round(Data::where('project_id', $this->project->id)->sum('executed_dollars'), 2);
         $this->executed_dollars = $this->executed;
 
@@ -150,7 +150,7 @@ class DashboardProjects extends Component
             $this->searchData,
             DB::raw('SUM(executed_dollars) as total1'),
             DB::raw('SUM(global_price) as total2'),
-            DB::raw('SUM(committed) as total3'),
+            DB::raw('SUM(booked) as total3'),
             DB::raw('SUM(real_value) as total4')
         )
             ->groupBy($this->searchData)
@@ -175,7 +175,7 @@ class DashboardProjects extends Component
                     return $multiColumnChartModel
                         ->addSeriesColumn($type, 'Budgeted', $value2)
                         ->addSeriesColumn($type, 'Executed', $value1)
-                        ->addSeriesColumn($type, 'Committed', $value3)
+                        ->addSeriesColumn($type, 'Booked', $value3)
                         ->addSeriesColumn($type, 'Real', $value4);
                 },
                 LivewireCharts::multiColumnChartModel()

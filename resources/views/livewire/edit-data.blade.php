@@ -190,19 +190,19 @@
                 <div class="md:col-span-1 col-span-3">
                     <label
 
-                        htmlFor="committed"
+                        htmlFor="booked"
                         class="block text-sm font-medium"
                     >
-                        Committed
+                        Booked
                     </label>
                     <input
-                        wire:model.live="committed"
+                        wire:model.live="booked"
                         type="number"
                         min="0"
-                        name="committed"
+                        name="booked"
                         class="mt-1 p-2 w-full border rounded disabled:opacity-50"
                     />
-                    <x-input-error for='committed'/>
+                    <x-input-error for='booked'/>
                 </div>
 
                 <div class="md:col-span-1 col-span-3">

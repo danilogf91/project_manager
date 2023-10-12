@@ -17,6 +17,7 @@ class Project extends Model
         'state',
         'investments',
         'justification',
+        'classification_of_investments',
         'data_uploaded',
         'start_date',
         'finish_date',
@@ -27,18 +28,30 @@ class Project extends Model
     ];
 
     protected $enumFields = [
-        'state' => ['planification', 'execution', 'finished'],
+        'state' => ['Planification', 'Execution', 'Finished'],
         'investments' => [
-            'innovation',
-            'efficiency_&_saving',
-            'replacement_&_restructuring',
-            'quality_&_hygiene',
-            'health_&_safety',
-            'environment',
-            'maintenance',
-            'capacity_increase'
+            'Innovation',
+            'Efficiency & Saving',
+            'Replacement & Restructuring',
+            'Quality & Hygiene',
+            'Health & Safety',
+            'Environment',
+            'Maintenance',
+            'Capacity Increase'
         ],
-        'justification' => ['normal_capex', 'special_project'],
+        'classification_of_investments' => [
+            'Buildings',
+            'Furniture',
+            'General Install',
+            'Land',
+            'Machines & Equipm',
+            'Office Hardware Software',
+            'Other',
+            'Vehicles',
+            'Vessel & Fishing Equipment',
+            'Warenhouse & Distrib'
+        ],
+        'justification' => ['Normal Capex', 'Special Project'],
     ];
 
     public function getEnumOptions($field)

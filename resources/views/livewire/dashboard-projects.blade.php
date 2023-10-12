@@ -30,8 +30,8 @@
                 <option value="real_value">
                     Real value
                 </option>
-                <option value="committed">
-                    Committed
+                <option value="booked">
+                    Booked
                 </option>
                 <option value="executed_dollars">
                     Executed Dollars

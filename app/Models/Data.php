@@ -23,10 +23,13 @@ class Data extends Model
             'unit_price',
             'global_price',
             'real_value',
-            'committed',
+            'booked',
             'percentage',
             'executed_dollars',
             'executed_euros',
+            'global_price_euros',
+            'real_value_euros',
+            'booked_euros',
             'code',
             'order_no',
             'input_num',
@@ -67,6 +70,11 @@ class Data extends Model
         'order_no',
         'input_num',
         'observations',
+        'booked',
+        'executed_euros',
+        'global_price_euros',
+        'real_value_euros',
+        'booked_euros',
     ];
 
     public function project()

@@ -20,14 +20,17 @@ class CreateProjects extends Component
     #[Rule('required|numeric|min:0|max:1000')]
     public $rate;
 
-    #[Rule('required|in:planification,execution,finished|string|max:255')]
-    public $state = 'planification';
+    #[Rule('required|in:Planification,Execution,Finished|string|max:255')]
+    public $state = 'Planification';
 
-    #[Rule('required|in:innovation,efficiency_&_saving,replacement_&_restructuring,quality_&_hygiene,health_&_safety,environment,maintenance,capacity_increase|string|max:255')]
-    public $investments = 'innovation';
+    #[Rule('required|in:Innovation,Efficiency & Saving,Replacement & Restructuring,Quality & Hygiene,Health & Safety,Environment,Maintenance,Capacity Increase|string|max:255')]
+    public $investments = 'Innovation';
 
-    #[Rule('required|in:normal_capex,special_project|string|max:255')]
-    public $justification = 'normal_capex';
+    #[Rule('required|in:Buildings,Furniture,General Install,Land,Machines & Equipm,Office Hardware Software,Other,Vehicles,Vessel & Fishing Equipment,Warenhouse & Distrib|string|max:255')]
+    public $classification_of_investments = "Buildings";
+
+    #[Rule('required|in:Normal Capex,Special Project|string|max:255')]
+    public $justification = 'Normal Capex';
 
     #[Rule('required|date|before:finish_date')]
     public $start_date;
@@ -37,7 +40,7 @@ class CreateProjects extends Component
 
     public function resetForm()
     {
-        $this->reset('name', 'pda_code', 'rate', 'state', 'investments', 'justification', 'start_date', 'finish_date');
+        $this->reset('name', 'pda_code', 'rate', 'state', 'investments', 'justification', 'start_date', 'finish_date', 'classification_of_investments');
     }
 
     public function createProject()
@@ -49,6 +52,7 @@ class CreateProjects extends Component
             'rate' => $this->rate,
             'state' => $this->state,
             'investments' => $this->investments,
+            'classification_of_investments' => $this->classification_of_investments,
             'justification' => $this->justification,
             'start_date' => $this->start_date,
             'finish_date' => $this->finish_date,
