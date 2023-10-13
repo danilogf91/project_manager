@@ -5,7 +5,6 @@
         <x-icon name="x-mark" />
     </button>
 
-
     <x-dialog-modal wire:model.live="openModal">
         <x-slot name="title" class="font-extrabold text-xl">
             {{ __('Delete Project') }}

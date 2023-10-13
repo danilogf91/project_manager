@@ -81,4 +81,16 @@ class DataTable extends Component
             'data' => $data
         ]);
     }
+
+    #[On('edit-data-message')]
+    public function editDataMessage()
+    {
+        session()->flash('edit-data', 'Data was updated successfully');
+    }
+
+    #[On('edit-data-message-deleted')]
+    public function editDataMessageDeleted()
+    {
+        session()->forget('edit-data');
+    }
 }

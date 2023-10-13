@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Data;
 use App\Models\Project;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class DeleteProjectsData extends Component
@@ -21,9 +22,9 @@ class DeleteProjectsData extends Component
         Data::where('project_id', $this->project->id)->delete();
         $this->project->data_uploaded = 0;
         $this->project->save();
-
         $this->reset('openModal');
         $this->dispatch('delete-data');
+        $this->dispatch('delete-data-message');
     }
 
     public function render()

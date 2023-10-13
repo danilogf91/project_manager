@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Data;
 use App\Models\Project;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
 
@@ -122,6 +123,7 @@ class EditData extends Component
         $projectData->save();
         $this->openModal = false;
         $this->dispatch('edit-data');
+        $this->dispatch('edit-data-message');
     }
 
     public function render()

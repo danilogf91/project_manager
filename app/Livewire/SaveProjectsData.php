@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Imports\DataImport;
 use App\Models\Project;
 use Exception;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -38,6 +39,7 @@ class SaveProjectsData extends Component
             $this->project->data_uploaded = 1;
             $this->project->save();
             $this->dispatch('upload-data');
+            $this->dispatch('upload-data-message');
             $this->closeModal();
             // Resto del código si la importación fue exitosa
         } catch (Exception $e) {
@@ -45,30 +47,6 @@ class SaveProjectsData extends Component
             $this->addError('excel_file', $e->getMessage());
         }
     }
-    // public function saveData()
-    // {
-    //     $this->validate();
-
-    //     $importErrors = [];
-
-    //     try {
-    //         Excel::import(new DataImport($this->project->id, $this->rate), $this->excel_file);
-    //         $this->project->data_uploaded = 1;
-    //         $this->project->save();
-    //         $this->dispatch('upload-data');
-    //         $this->closeModal();
-    //         // Resto del código si la importación fue exitosa
-    //     } catch (Exception $e) {
-    //         // Almacena cada error en un array
-    //         $importErrors[] = $e->getMessage();
-    //     }
-
-    //     // Si se capturaron errores, agrega todos los errores al componente
-    //     if (!empty($importErrors)) {
-    //         $this->addError('import_errors', $importErrors);
-    //     }
-    // }
-
 
     public function render()
     {

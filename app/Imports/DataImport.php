@@ -34,7 +34,7 @@ class DataImport implements WithHeadingRow, ToModel
             'stage' => $row['stage'],
             'real_value' => $this->toFloat($row['real']),
             'booked' => $this->toFloat($row['booked']),
-            'percentage' => $this->toFloat($row['percentage']) * 100,
+            'percentage' => $this->toFloat($row['percentage']) * 1,
             'executed_dollars' => $this->toFloat($row['executed_dollars']),
             'executed_euros' => $this->toFloat($row['executed_dollars']) * $this->rate,
             'global_price_euros' => $this->toFloat($row['global_price']) * $this->rate,

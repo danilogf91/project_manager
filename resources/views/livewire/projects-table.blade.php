@@ -1,6 +1,47 @@
 <div>
 @if ($active)
     <section class="mt-4">
+
+    @if (session()->has('delete-project'))
+        <div class="fixed top-4 right-4 z-10">
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                <p>{{ session('delete-project') }}</p>
+            </div>
+        </div>
+    @endif
+
+    @if (session()->has('create-project'))
+        <div class="fixed top-4 right-4 z-10">
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4">
+                <p>{{ session('create-project') }}</p>
+            </div>
+        </div>
+    @endif
+
+    @if (session()->has('edit-project'))
+        <div class="fixed top-4 right-4 z-10">
+            <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-600 p-4">
+                <p>{{ session('edit-project') }}</p>
+            </div>
+        </div>
+    @endif
+
+    @if (session()->has('delete-excel-data'))
+        <div class="fixed top-4 right-4 z-10">
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                <p>{{ session('delete-excel-data') }}</p>
+            </div>
+        </div>
+    @endif
+
+    @if (session()->has('load-excel-data'))
+        <div class="fixed top-4 right-4 z-10">
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4">
+                <p>{{ session('load-excel-data') }}</p>
+            </div>
+        </div>
+    @endif
+
         <div>
             <!-- Start coding here -->
             <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
@@ -137,13 +178,13 @@
 
                                 @if ($is_admin_user)
                                     <td class="px-2 py-1 flex items-center justify-start">
-                                        <livewire:edit-projects :key="$project->id" :project="$project" />
+                                        <livewire:edit-projects :key="$project->pda_code.$project->id.$project->pda_code" :project="$project" />
                                         <livewire:delete-projects :key="$project->id.$project->name" :project="$project" />
 
                                         @if (!$project->data_uploaded)
-                                            <livewire:save-projects-data :key="$project->name.$project->id" :project="$project" />
+                                            <livewire:save-projects-data :key="$project->name.$project->id.$project->pda_code" :project="$project" />
                                         @else
-                                            <livewire:delete-projects-data :key="$project->id.$project->name.$project->id" :project="$project" />
+                                            <livewire:delete-projects-data :key="$project->pda_code.$project->name.$project->id" :project="$project" />
                                         @endif
                                     </td>
                                 @endif
@@ -164,3 +205,38 @@
     @livewire('user-disabled')
 @endif
 </div>
+
+<script>
+    document.addEventListener('livewire:initialized', () => {
+
+        @this.on('project-created-messagge', (event) => {
+            setTimeout(function() {
+                @this.dispatch('clear-message');
+            }, 2000);
+        });
+
+        @this.on('edit-projects-message', (event) => {
+            setTimeout(function() {
+                @this.dispatch('edit-projects-message-deleted');
+            }, 2000);
+        });
+
+        @this.on('project-deleted-message', (event) => {
+            setTimeout(function() {
+                @this.dispatch('clear-project-deleted-message');
+            }, 2000);
+        });
+
+        @this.on('delete-data-message', (event) => {
+            setTimeout(function() {
+                @this.dispatch('delete-data-message-deleted');
+            }, 2000);
+        });
+
+        @this.on('upload-data-message', (event) => {
+            setTimeout(function() {
+                @this.dispatch('upload-data-message-deleted');
+            }, 2000);
+        });
+    });
+</script>

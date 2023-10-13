@@ -214,3 +214,13 @@
         </x-slot>
     </x-dialog-modal>
 </div>
+
+{{-- <script>
+    document.addEventListener('livewire:initialized', () => {
+        @this.on('edit-projects-message', (event) => {
+            setTimeout(function() {
+                @this.dispatch('edit-projects-message-deleted');
+            }, 2000);
+        });
+    });
+</script> --}}

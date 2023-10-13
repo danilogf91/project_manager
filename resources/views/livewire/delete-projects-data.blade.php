@@ -26,5 +26,4 @@
             </x-danger-button>
         </x-slot>
     </x-dialog-modal>
-
 </div>

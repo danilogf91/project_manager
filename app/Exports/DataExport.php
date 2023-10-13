@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Data;
 use App\Models\Project;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -37,7 +38,8 @@ class DataExport implements FromCollection, WithHeadings
                 'global_price',
                 'real_value',
                 'booked',
-                'percentage',
+                // 'percentage',
+                DB::raw('percentage/100 as percentage'), // Divide el campo "percentage" por 1000
                 'executed_dollars',
                 'executed_euros',
                 // 'global_price_euros',

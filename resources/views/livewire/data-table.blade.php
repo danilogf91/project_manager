@@ -7,6 +7,14 @@
         </h2>
     </x-slot>
 
+    @if (session()->has('edit-data'))
+        <div class="fixed top-4 right-4 z-10">
+            <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-600 p-4">
+                <p>{{ session('edit-data') }}</p>
+            </div>
+        </div>
+    @endif
+
     @if ($active)
     <section class="mt-4">
 
@@ -154,3 +162,14 @@
         @livewire('user-disabled')
     @endif
 </div>
+
+
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        @this.on('edit-data-message', (event) => {
+            setTimeout(function() {
+                @this.dispatch('edit-data-message-deleted');
+            }, 2000);
+        });
+    });
+</script>
