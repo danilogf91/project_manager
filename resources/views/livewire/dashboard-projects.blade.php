@@ -1,5 +1,6 @@
 <div class="p-2">
     <div class="justify-center rounded flex flex-col md:flex-row gap-2">
+
         <div class="md:col-span-1 col-span-3">
             <select
                 wire:model.live="searchData"
@@ -24,19 +25,39 @@
                 name="investments"
                 class="text-center px-7 py-2 w-full border rounded"
             >
-                <option value="global_price">
+                <option value="global_price_euros">
                     Global Price
                 </option>
-                <option value="real_value">
+                <option value="real_value_euros">
                     Real value
                 </option>
-                <option value="booked">
+                <option value="booked_euros">
                     Booked
                 </option>
-                <option value="executed_dollars">
-                    Executed Dollars
+                <option value="executed_euros">
+                    Executed
                 </option>
             </select>
+        </div>
+
+        <div class="md:col-span-1 col-span-3">
+            <select
+                wire:model.live="dollarOrEuro"
+                name="dollarOrEuro"
+                class="text-center px-7 py-2 w-full border rounded"
+            >
+                <option value="euro">
+                    Euro €
+                </option>
+                <option value="dollar">
+                    Dollar $
+                </option>
+
+            </select>
+        </div>
+
+        <div class="md:col-span-1 col-span-3">
+            <input type="number" wire:model="rateValue" class="rounded">
         </div>
     </div>
 
@@ -105,6 +126,23 @@
     </div>
 
     <div class="flex flex-col mt-2 md:flex-row gap-2">
+
+        <div class="h-[30rem] shadow rounded p-4 border bg-white flex-1">
+            <livewire:livewire-column-chart
+                key="{{ $resumePercentageGraph->reactiveKey() }}"
+                :column-chart-model="$resumePercentageGraph"
+            />
+        </div>
+
+        <div class="h-[30rem] shadow rounded p-4 border bg-white flex-1">
+           <livewire:livewire-column-chart
+               key="{{ $resumeGraph->reactiveKey() }}"
+               :column-chart-model="$resumeGraph"
+           />
+       </div>
+   </div>
+
+    <div class="flex flex-col mt-2 md:flex-row gap-2">
         <div class="h-[30rem] shadow rounded p-4 border bg-white flex-1">
             <livewire:livewire-pie-chart
                 key="{{ $pieChartModel->reactiveKey() }}"
@@ -114,8 +152,8 @@
 
         <div class="h-[30rem] shadow rounded p-4 border bg-white flex-1">
             <livewire:livewire-pie-chart
-                key="{{ $pieChartModel->reactiveKey() }}"
-                :pie-chart-model="$pieChartModel"
+                key="{{ $pieChartModelResume->reactiveKey() }}"
+                :pie-chart-model="$pieChartModelResume"
             />
         </div>
     </div>
@@ -130,10 +168,9 @@
         </div>
 
         <div class="h-[30rem] shadow rounded p-4 border bg-white flex-1">
-
-            <livewire:livewire-radar-chart
-                key="{{ $radarChartModel->reactiveKey() }}"
-                :radar-chart-model="$radarChartModel"
+            <livewire:livewire-pie-chart
+                key="{{ $pieChartModelResumeTwo->reactiveKey() }}"
+                :pie-chart-model="$pieChartModelResumeTwo"
             />
         </div>
 

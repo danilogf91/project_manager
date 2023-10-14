@@ -35,7 +35,7 @@ class ExchangeRate extends Controller
             $exchangeRateUSDToEUR = $data['quotes']['EURUSD'];
 
             // Calcula la tasa de cambio de EUR a USD (inversa)
-            $exchangeRateEURToUSD = 1 / $exchangeRateUSDToEUR;
+            $exchangeRateEURToUSD = 1 * $exchangeRateUSDToEUR;
 
             // Puedes usar $exchangeRateEURToUSD en tu aplicación
             return $exchangeRateEURToUSD;

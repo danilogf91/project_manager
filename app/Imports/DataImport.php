@@ -55,6 +55,6 @@ class DataImport implements WithHeadingRow, ToModel
 
     protected function toFloat($value)
     {
-        return is_numeric($value) ? (float) $value : null;
+        return is_numeric($value) ? (float) $value : 0;
     }
 }
