@@ -67,14 +67,14 @@
         <div class="w-full md:w-1/5 bg-white rounded">
             <div class="p-4 text-center"> <!-- Agregar text-center aquí -->
                 <span class="text-2xl font-extrabold">Budgeted</span>
-                <h3 class="text-xl font-semibold mt-2">{{ number_format($budgeted, 0, ',', '.')}} $</h3>
+                <h3 class="text-xl font-semibold mt-2">{{ number_format($budgeted, 0, ',', '.')}} {{ ($dollarOrEuro === "dollar") ? "$": "€" }}</h3>
             </div>
         </div>
 
         <div class="w-full md:w-1/5 bg-white rounded mb-2 md:mb-0">
             <div class="p-4 text-center"> <!-- Agregar text-center aquí -->
                 <span class="text-2xl font-extrabold">Booked</span>
-                <h3 class="text-xl font-semibold mt-2">{{ number_format($booked, 0, ',', '.')}} $</h3>
+                <h3 class="text-xl font-semibold mt-2">{{ number_format($booked, 0, ',', '.')}} {{ ($dollarOrEuro === "dollar") ? "$": "€" }}</h3>
             </div>
         </div>
         {{-- PONER EN VERDE CUANDO SE HAYA DADO COMO TERMINADO EL PROYECTO --}}
@@ -97,14 +97,14 @@
         <div class="w-full md:w-1/5 bg-white rounded mb-2 md:mb-0">
             <div class="p-4 text-center"> <!-- Agregar text-center aquí -->
                 <span class="text-2xl font-extrabold">Executed</span>
-                <h3 class="text-xl font-semibold mt-2">{{ number_format($executed, 0, ',', '.') }} $</h3>
+                <h3 class="text-xl font-semibold mt-2">{{ number_format($executed, 0, ',', '.') }} {{ ($dollarOrEuro === "dollar") ? "$": "€" }}</h3>
             </div>
         </div>
 
         <div class="w-full md:w-1/5 bg-white rounded mb-2 md:mb-0">
             <div class="p-4 text-center"> <!-- Agregar text-center aquí -->
                 <span class="text-2xl font-extrabold">Real (SAP)</span>
-                <h3 class="text-xl font-semibold mt-2">{{ number_format($real_value, 0, ',', '.')}} $</h3>
+                <h3 class="text-xl font-semibold mt-2">{{ number_format($real_value, 0, ',', '.')}} {{ ($dollarOrEuro === "dollar") ? "$": "€" }}</h3>
             </div>
         </div>
     </div>

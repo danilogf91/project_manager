@@ -18,8 +18,16 @@
     @if ($active)
     <section class="mt-4">
 
-            {{-- <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden"> --}}
+
+
             <div class="bg-white shadow-md rounded overflow-hidden w-full p-2">
+
+                <div>
+                    <h1 class="rounded shadow p-2 italic text-2xl font-bold text-stone-600">
+                        Project: {{ $name }}
+                    </h1>
+                </div>
+
                 <div class="flex items-center justify-between px-4 py-1">
                     <div class="py-4 px-3">
                         <div class="space-x-4 items-center mb-3">
@@ -88,7 +96,6 @@
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-auto">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
-                                {{-- <th wire:click="setSortBy('id')" scope="col" class=" cursor-pointer hover:bg-gray-200 px-2 py-1">id</th> --}}
                                 <th wire:click="setSortBy('area')" scope="col" class=" cursor-pointer hover:bg-gray-200 px-1 py-1">area</th>
 
                                 @if ($is_admin_user)
@@ -125,7 +132,7 @@
 
                                 @if ($is_admin_user)
                                     <td>
-                                        <livewire:edit-data wire:key="{{$item->id }}" :data="$item" />
+                                        <livewire:edit-data wire:key="edit-{{$item->id}}" :data="$item" />
                                     </td>
                                 @endif
 

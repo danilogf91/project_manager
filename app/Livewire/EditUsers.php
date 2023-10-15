@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
 
@@ -34,7 +35,8 @@ class EditUsers extends Component
         $user->active = $this->active;
         $user->save();
         $this->openModal = false;
-        $this->dispatch('edit-users');
+        $this->dispatch('users-render');
+        session()->flash('edit-users', 'User updated successfull');
     }
 
     public function mount(User $user)

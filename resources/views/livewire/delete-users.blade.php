@@ -5,6 +5,13 @@
         <x-icon name="x-mark" />
     </button>
 
+    @if (session()->has('delete-users'))
+        <div class="fixed top-4 right-4 z-10">
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                <p>{{ session('delete-users') }}</p>
+            </div>
+        </div>
+    @endif
 
     <x-dialog-modal wire:model.live="openModal">
         <x-slot name="title" class="font-extrabold text-xl">

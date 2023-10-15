@@ -15,7 +15,8 @@ class DeleteUsers extends Component
     {
         $user->delete();
         $this->openModal = false;
-        $this->dispatch('user-deleted');
+        $this->dispatch('users-render');
+        session()->flash('edit-users', 'User deleted successfull');
     }
 
     public function mount($user)

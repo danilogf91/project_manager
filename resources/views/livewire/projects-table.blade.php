@@ -12,7 +12,7 @@
 
     @if (session()->has('create-project'))
         <div class="fixed top-4 right-4 z-10">
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4">
+            <div class="bg-green-400 border-l-4 border-green-500 text-green-700 p-4">
                 <p>{{ session('create-project') }}</p>
             </div>
         </div>
@@ -178,13 +178,13 @@
 
                                 @if ($is_admin_user)
                                     <td class="px-2 py-1 flex items-center justify-start">
-                                        <livewire:edit-projects :key="$project->pda_code.$project->id.$project->pda_code" :project="$project" />
-                                        <livewire:delete-projects :key="$project->id.$project->name" :project="$project" />
+                                        <livewire:edit-projects wire:key="edit-{{$project->id}}" :project="$project" />
+                                        <livewire:delete-projects wire:key="delete-project-{{$project->id}}" :project="$project" />
 
                                         @if (!$project->data_uploaded)
-                                            <livewire:save-projects-data :key="$project->name.$project->id.$project->pda_code" :project="$project" />
+                                            <livewire:save-projects-data wire:key="save-{{$project->id}}" :project="$project" />
                                         @else
-                                            <livewire:delete-projects-data :key="$project->pda_code.$project->name.$project->id" :project="$project" />
+                                            <livewire:delete-projects-data wire:key="delete-project-data-{{$project->id}}" :project="$project" />
                                         @endif
                                     </td>
                                 @endif

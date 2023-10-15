@@ -5,6 +5,14 @@
         <x-icon name="pencil-square" />
     </button>
 
+    @if (session()->has('edit-users'))
+        <div class="fixed top-4 right-4 z-10">
+            <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4">
+                <p>{{ session('edit-users') }}</p>
+            </div>
+        </div>
+    @endif
+
     <x-dialog-modal wire:model.live="openModal">
         <x-slot name="title" class="font-extrabold text-xl">
             {{ __('Edit user') }}
