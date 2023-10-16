@@ -69,7 +69,7 @@ class EditProjects extends Component
         $project->finish_date = $this->finish_date;
         $project->save();
         $this->openModal = false;
-        $this->dispatch('edit-projects');
+        $this->dispatch('update-projects-table');
         $this->dispatch('edit-projects-message');
     }
 

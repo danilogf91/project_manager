@@ -44,16 +44,13 @@ class ProjectsTable extends Component
         return Excel::download(new ProjectExport, 'projects.xlsx');
     }
 
-    #[On('project-deleted', 'delete-data', 'upload-data', 'edit-projects', 'project-created')]
+    #[On('update-projects-table')]
     public function render()
     {
         return view(
             'livewire.projects-table',
             [
                 'projects' => Project::search($this->search)
-                    // ->when($this->admin !== '', function ($query) {
-                    //     $query->where('is_admin', $this->admin);
-                    // })
                     ->orderBy($this->sortBy, $this->sortDir)
                     ->paginate($this->perPage)
             ]

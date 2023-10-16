@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Http\Controllers\ExchangeRate;
 use App\Models\Data;
 use App\Models\Project;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
@@ -11,7 +10,6 @@ use Asantibanez\LivewireCharts\Models\PieChartModel;
 use Asantibanez\LivewireCharts\Models\RadarChartModel;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
-use Nette\Utils\Floats;
 
 class TestChart extends Component
 {
@@ -85,13 +83,20 @@ class TestChart extends Component
 
     public function updated($property, $value)
     {
+
+        // dd($property, $value);
+
         if ($property === "typeOfProjectSearch") {
             $this->stateProject = Project::distinct()
                 ->where('data_uploaded', 1)
                 ->when($value !== 'all', function ($query) use ($value) {
                     return $query->where('projects.classification_of_investments', $value);
                 })
+                ->when($this->yearSearch !== 'all', function ($query) {
+                    return $query->whereRaw('YEAR(projects.start_date) = ?', [$this->yearSearch]);
+                })
                 ->pluck('state');
+            // dd($this->stateProject);
         }
 
         if ($property === "stateSearch") {
@@ -99,6 +104,27 @@ class TestChart extends Component
                 ->where('data_uploaded', 1)
                 ->when($value !== 'all', function ($query) use ($value) {
                     return $query->where('projects.state', $value);
+                })
+                ->when($this->yearSearch !== 'all', function ($query) {
+                    return $query->whereRaw('YEAR(projects.start_date) = ?', [$this->yearSearch]);
+                })
+                ->pluck('classification_of_investments');
+
+            // dd($this->typeOfProject);
+        }
+
+        if ($property === "yearSearch") {
+            $this->stateProject = Project::distinct()
+                ->where('data_uploaded', 1)
+                ->when($value !== 'all', function ($query) use ($value) {
+                    return $query->whereRaw('YEAR(projects.start_date) = ?', [$value]);
+                })
+                ->pluck('state');
+
+            $this->typeOfProject = Project::distinct()
+                ->where('data_uploaded', 1)
+                ->when($value !== 'all', function ($query) use ($value) {
+                    return $query->whereRaw('YEAR(projects.start_date) = ?', [$value]);
                 })
                 ->pluck('classification_of_investments');
         }
@@ -358,23 +384,8 @@ class TestChart extends Component
             }
         })->sum($item);
 
-        // dd((float)$this->exchangeRate);
         return round((float)$value / (float)$this->exchangeRate, 2);
     }
-
-
-    // public function searchValue($search, $label)
-    // {
-    //     if (is_numeric($search)) {
-    //         $value = Project::where('state', $label)
-    //             ->whereYear('start_date', intval($search))
-    //             ->count();
-    //     } else {
-    //         $value = Project::where('state', $label)
-    //             ->count();
-    //     }
-    //     return $value;
-    // }
 
     public function searchValue($search, $label, $classification)
     {

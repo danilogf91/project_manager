@@ -33,6 +33,7 @@ class SaveProjectsData extends Component
     public function updated($property, $value)
     {
         if ($property === 'excel_file') {
+            $this->validate();
             $this->buttonState = false;
         }
 

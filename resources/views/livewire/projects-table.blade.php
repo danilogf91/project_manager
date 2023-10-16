@@ -4,7 +4,7 @@
 
     @if (session()->has('delete-project'))
         <div class="fixed top-4 right-4 z-10">
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <div class="bg-red-500 border-l-4 border-orange-700 text-white p-4">
                 <p>{{ session('delete-project') }}</p>
             </div>
         </div>
@@ -12,7 +12,7 @@
 
     @if (session()->has('create-project'))
         <div class="fixed top-4 right-4 z-10">
-            <div class="bg-green-400 border-l-4 border-green-500 text-green-700 p-4">
+            <div class="bg-green-400 border-l-4 border-green-700 text-green-700 p-4">
                 <p>{{ session('create-project') }}</p>
             </div>
         </div>
@@ -20,7 +20,7 @@
 
     @if (session()->has('edit-project'))
         <div class="fixed top-4 right-4 z-10">
-            <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-600 p-4">
+            <div class="bg-red-500 border-l-4 border-orange-700 text-white p-4">
                 <p>{{ session('edit-project') }}</p>
             </div>
         </div>
@@ -28,7 +28,7 @@
 
     @if (session()->has('delete-excel-data'))
         <div class="fixed top-4 right-4 z-10">
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <div class="bg-red-500 border-l-4 border-orange-700 text-white p-4">
                 <p>{{ session('delete-excel-data') }}</p>
             </div>
         </div>
@@ -36,7 +36,7 @@
 
     @if (session()->has('load-excel-data'))
         <div class="fixed top-4 right-4 z-10">
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4">
+            <div class="bg-green-400 border-l-4 border-green-700 text-green-700 p-4">
                 <p>{{ session('load-excel-data') }}</p>
             </div>
         </div>
@@ -117,80 +117,95 @@
                                 <th wire:click="setSortBy('name')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">name</th>
                                 <th cope="col" class="px-2 py-1"></th>
                                 <th wire:click="setSortBy('pda_code')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">pda code</th>
+                                @if ($is_admin_user)
+                                    <th scope="col" class="px-2 py-1 flex items-center justify-start">file</th>
+                                @endif
                                 <th wire:click="setSortBy('rate')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">rate</th>
                                 <th wire:click="setSortBy('state')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">state</th>
                                 <th wire:click="setSortBy('investments')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">investments</th>
-                                <th wire:click="setSortBy('classification_of_investments')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">classification_of_investments</th>
+                                <th wire:click="setSortBy('classification_of_investments')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">classification</th>
                                 <th wire:click="setSortBy('justification')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">justification</th>
                                 <th wire:click="setSortBy('start_date')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">start date</th>
                                 <th wire:click="setSortBy('finish_date')" scope="col" class="cursor-pointer hover:bg-gray-200 px-2 py-1">finish date</th>
                                 @if ($is_admin_user)
-                                <th scope="col" class="px-2 py-1">
-                                    <span class="sr-only">Actions</span>
-                                </th>
+                                    <th scope="col" class="px-2 py-1 flex items-center justify-start">
+                                        {{-- <span class="sr-only">Actions</span> --}}
+                                        Actions
+                                    </th>
                                 @endif
                             </tr>
                         </thead>
+
                         <tbody>
+
                             @foreach ( $projects as $project )
-
-                            <tr wire:key="{{ $project->id }}" class="border-b dark:border-gray-700">
-                                <th scope="row"
-                                class="px-2 py-1 font-sm text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $project->id }}</th>
-                                <th scope="row"
+                                <tr wire:key="row-{{$project->id }}" class="border-b dark:border-gray-700">
+                                    <th scope="row"
                                     class="px-2 py-1 font-sm text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $project->id }}</th>
 
-                                    @if ($project->data_uploaded && $is_admin_user)
-                                        <span role="button" class="pointer text-red-500 hover:text-red-600 hover:underline">
-                                            <a href="{{ route('data', ['id' => $project->id]) }}">
-                                                {{ $project->name }}
-                                            </a>
-                                        </span>
-                                    @else
-                                        <span>
-                                            {{ $project->name }}
-                                        </span>
-                                    @endif
-                                </th>
+                                    <td scope="row"
+                                        class="px-2 py-1 font-sm font-bold text-gray-900 whitespace-nowrap dark:text-white">
 
-                                <td class="px-2 py-1">
-                                    @if ($project->data_uploaded)
-                                        <span role="button" class="pointer text-red-500 hover:text-red-600 hover:underline">
-                                            <a href="/projects/{{ $project->id }}">
-                                                Dashboard
-                                            </a>
-                                        </span>
-                                    @else
-                                        <span>
-                                                No Data
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-2 py-1">{{ $project->pda_code }}</td>
-                                <td class="px-2 py-1">{{ $project->rate }}</td>
-                                <td class="px-2 py-1">{{ $project->state }}</td>
-                                <td class="px-2 py-1">{{ $project->investments }}</td>
-                                <td class="px-2 py-1">{{ $project->classification_of_investments }}</td>
-                                <td class="px-2 py-1">{{ $project->justification }}</td>
-                                <td class="px-2 py-1">{{ $project->start_date }}</td>
-                                <td class="px-2 py-1">{{ $project->finish_date }}</td>
-
-                                @if ($is_admin_user)
-                                    <td class="px-2 py-1 flex items-center justify-start">
-                                        <livewire:edit-projects wire:key="edit-{{$project->id}}" :project="$project" />
-                                        <livewire:delete-projects wire:key="delete-project-{{$project->id}}" :project="$project" />
-
-                                        @if (!$project->data_uploaded)
-                                            <livewire:save-projects-data wire:key="save-{{$project->id}}" :project="$project" />
+                                        @if ($project->data_uploaded && $is_admin_user)
+                                            <span role="button" class="pointer text-red-500 hover:text-red-600 hover:underline">
+                                                <a href="{{ route('data', ['id' => $project->id]) }}">
+                                                    {{ $project->name }}
+                                                </a>
+                                            </span>
                                         @else
-                                            <livewire:delete-projects-data wire:key="delete-project-data-{{$project->id}}" :project="$project" />
+                                            <span>
+                                                {{ $project->name }}
+                                            </span>
                                         @endif
                                     </td>
-                                @endif
-                            </tr>
-                            @endforeach
 
+                                    <td class="px-2 py-1">
+                                        @if ($project->data_uploaded)
+                                            <span role="button" class="pointer text-red-500 hover:text-red-600 hover:underline">
+                                                <a href="/projects/{{ $project->id }}">
+                                                    Dashboard
+                                                </a>
+                                            </span>
+                                        @else
+                                            <span>
+                                                    No Data
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-2 py-1">{{ $project->pda_code }}</td>
+                                    @if ($is_admin_user)
+                                        <td class="px-2 py-1 flex items-center justify-start">
+                                            @if ($project->upload_pda)
+                                                {{-- <livewire:download-pdf wire:key="download-pdf-{{$project->id}}" :project="$project" /> --}}
+                                                <livewire:delete-or-edit-pdf wire:key="delete-pdf-{{$project->id}}" :project="$project" />
+                                            @else
+                                                <livewire:save-pdf wire:key="save-pdf-{{$project->id}}" :project="$project" />
+                                            @endif
+                                        </td>
+                                    @endif
+                                    <td class="px-2 py-1">{{ $project->rate }}</td>
+                                    <td class="px-2 py-1">{{ $project->state }}</td>
+                                    <td class="px-2 py-1">{{ $project->investments }}</td>
+                                    <td class="px-2 py-1">{{ $project->classification_of_investments }}</td>
+                                    <td class="px-2 py-1">{{ $project->justification }}</td>
+                                    <td class="px-2 py-1">{{ $project->start_date }}</td>
+                                    <td class="px-2 py-1">{{ $project->finish_date }}</td>
+
+                                    <td class="px-2 py-1 flex items-center justify-start">
+                                        @if ($is_admin_user)
+                                            <livewire:edit-projects wire:key="edit-{{$project->id}}" :project="$project" />
+                                            <livewire:delete-projects wire:key="delete-project-{{$project->id}}" :project="$project" />
+
+                                            @if (!$project->data_uploaded)
+                                                <livewire:save-projects-data wire:key="save-{{$project->id}}" :project="$project" />
+                                            @else
+                                                <livewire:delete-projects-data wire:key="delete-project-data-{{$project->id}}" :project="$project" />
+                                            @endif
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

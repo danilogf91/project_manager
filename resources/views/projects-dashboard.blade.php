@@ -6,6 +6,6 @@
     </x-slot>
 
         <div class="mx-auto sm:px-6 lg:px-8 ">
-            <livewire:dashboard-projects lazy :project="$project"/>
+            <livewire:dashboard-projects :project="$project"/>
         </div>
 </x-app-layout>

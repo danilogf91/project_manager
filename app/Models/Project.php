@@ -21,6 +21,8 @@ class Project extends Model
         'data_uploaded',
         'start_date',
         'finish_date',
+        'file_name',
+        'upload_pda'
     ];
 
     protected $casts = [

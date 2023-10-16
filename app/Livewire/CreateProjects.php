@@ -65,7 +65,7 @@ class CreateProjects extends Component
 
         $this->openModal = false;
         $this->resetForm();
-        $this->dispatch('project-created');
+        $this->dispatch('update-projects-table');
         $this->dispatch('project-created-messagge');
     }
 

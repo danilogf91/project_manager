@@ -23,7 +23,7 @@ class DeleteProjectsData extends Component
         $this->project->data_uploaded = 0;
         $this->project->save();
         $this->reset('openModal');
-        $this->dispatch('delete-data');
+        $this->dispatch('update-projects-table');
         $this->dispatch('delete-data-message');
     }
 

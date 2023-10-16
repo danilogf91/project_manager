@@ -15,7 +15,17 @@ class ProjectExport implements FromCollection, WithHeadings
     {
         // return Project::all();
 
-        return Project::select('id', 'name', 'pda_code', 'rate', 'state', 'investments', 'justification', 'classification_of_investments')->get();
+        return Project::select(
+            'id',
+            'name',
+            'pda_code',
+            'rate',
+            'state',
+            'upload_pda',
+            'investments',
+            'justification',
+            'classification_of_investments'
+        )->get();
     }
 
     public function headings(): array
@@ -26,6 +36,7 @@ class ProjectExport implements FromCollection, WithHeadings
             'pda_code',
             'rate',
             'state',
+            'upload_pda',
             'investments',
             'justification',
             'classification_of_investments'

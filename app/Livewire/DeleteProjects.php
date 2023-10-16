@@ -21,7 +21,7 @@ class DeleteProjects extends Component
         $project->delete();
         // session()->flash('delete-project', 'The project was deleted successfully');
         $this->openModal = false;
-        $this->dispatch('project-deleted');
+        $this->dispatch('update-projects-table');
         $this->dispatch('project-deleted-message');
     }
 
