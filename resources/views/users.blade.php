@@ -6,6 +6,6 @@
     </x-slot>
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <livewire:users-table lazy :is_admin="$user->is_admin" :active="$user->active"/>
+            <livewire:users-table :is_admin="$user->is_admin" :active="$user->active"/>
             </div>
 </x-app-layout>

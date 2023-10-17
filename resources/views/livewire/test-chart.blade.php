@@ -85,7 +85,7 @@
         </div>
 
         <div class="md:col-span-1 col-span-3">
-            <input type="number" wire:model.live="rateValue" class="rounded">
+            <input type="number" wire:model.live="rateValue" class="rounded text-center px-7 py-2 w-full border">
         </div>
     </div>
 
@@ -128,8 +128,66 @@
 
     </div>
 
-        <div class="flex flex-col mt-2 md:flex-row gap-2">
+    <div class="flex flex-col mt-2 md:flex-row gap-1 bg-white p-4 shadow rounded">
 
+        {{-- <button wire:click="downloadGraph">Descargar Gráfica</button> --}}
+
+        <div class="md:w-1/2"> <!-- Nuevo div para los elementos de la lista -->
+            <ul class="flex flex-col gap-2 sm:flex-row sm:space-x-4 sm:items-center text-xs">
+                <li>
+                    <input type="checkbox" value="Innovation" wire:model.live="types"/>
+                    <span>Innovation</span>
+                </li>
+
+                <li>
+                    <input type="checkbox" value="Efficiency & Saving" wire:model.live="types"/>
+                    <span>Efficiency & Saving</span>
+                </li>
+
+                <li>
+                    <input type="checkbox" value="Replacement & Restructuring" wire:model.live="types"/>
+                    <span>Replacement & Restructuring</span>
+                </li>
+
+                <li>
+                    <input type="checkbox" value="Quality & Hygiene" wire:model.live="types"/>
+                    <span>Quality & Hygiene</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="md:w-1/2">
+            <ul class="flex flex-col gap-2 sm:flex-row sm:space-x-4 sm:items-center text-xs">
+                <li>
+                    <input type="checkbox" value="Health & Safety" wire:model.live="types"/>
+                    <span>Health & Safety</span>
+                </li>
+
+                <li>
+                    <input type="checkbox" value="Environment" wire:model.live="types"/>
+                    <span>Environment</span>
+                </li>
+
+                <li>
+                    <input type="checkbox" value="Maintenance" wire:model.live="types"/>
+                    <span>Maintenance</span>
+                </li>
+
+                <li>
+                    <input type="checkbox" value="Capacity Increase" wire:model.live="types"/>
+                    <span>Capacity Increase</span>
+                </li>
+            </ul>
+        </div>
+
+        {{-- <div class="md:w-1/3 text-center mt-2 md:mt-0"> <!-- Nuevo div para el elemento "Show data labels" -->
+            <input type="checkbox" value="other" wire:model.live="showDataLabels" class="text-xs"/>
+            <span>Show data labels</span>
+        </div> --}}
+    </div>
+
+
+        <div class="flex flex-col mt-2 md:flex-row gap-2">
             <div class="h-[30rem] shadow rounded p-4 border bg-white flex-1">
                 <livewire:livewire-column-chart
                     key="{{ $numProjectsGraph->reactiveKey() }}"

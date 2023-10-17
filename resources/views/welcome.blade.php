@@ -49,30 +49,7 @@
 
             </div>
 
-            {{-- <ul class="font-montserrat items-center hidden md:flex">
-                <li class="mx-3 ">
-                    <a class="growing-underline" href="howitworks">
-                    How it works
-                    </a>
-                </li>
-                <li class="growing-underline mx-3">
-                    <a href="features">Features</a>
-                </li>
-                <li class="growing-underline mx-3">
-                    <a href="pricing">Pricing</a>
-                </li>
-            </ul> --}}
 
-            {{-- <div class="font-montserrat hidden md:block">
-                <button class="mr-6">Login</button>
-                <button class="py-2 px-4 text-white bg-black rounded-3xl">
-                    Signup
-                </button>
-            </div> --}}
-
-            {{-- <div id="showMenu" class="md:hidden">
-                <img src='dist/assets/logos/Menu.svg' alt="Menu icon" />
-            </div> --}}
 
             @if (Route::has('login'))
                 <div class="sm:right-0 p-6 text-right z-10">
@@ -88,48 +65,7 @@
                 </div>
             @endif
         </nav>
-        {{-- <div id='mobileNav' class="hidden px-4 py-6 fixed top-0 left-0 h-full w-full bg-secondary z-20 animate-fade-in-down">
-            <div id="hideMenu" class="flex justify-end">
-                <img src='dist/assets/logos/Cross.svg' alt="" class="h-16 w-16" />
-            </div>
-            <ul class="font-montserrat flex flex-col mx-8 my-24 items-center text-3xl">
-                <li class="my-6">
-                    <a href="howitworks">How it works</a>
-                </li>
-                <li class="my-6">
-                    <a href="features">Features</a>
-                </li>
-                <li class="my-6">
-                    <a href="pricing">Pricing</a>
-                </li>
-            </ul>
-        </div> --}}
 
-        <!-- Hero -->
-        {{-- <section class="md:mt-0 md:h-screen flex flex-col md:flex-row md:justify-between md:items-center lg:px-24 md:px-6 p-4 text-center md:text-left">
-            <div class="md:flex-1 md:mr-10">
-                <h1 class="italic font-semibold text-5xl mb-7">
-                    Project
-                    <span class="italic font-semibold bg-left-bottom bg-no-repeat pb-4 bg-100%" style="background-image: url('{{ asset('img/Underline1.svg') }}');">
-                        Managment
-                    </span>
-                </h1>
-
-                <p class="text-justify p-2">
-                    Efficient Industrial Project Management Software
-                    Our software streamlines industrial project management, simplifying every phase from planning to execution.
-                    Designed for various sectors, we offer tools for detailed planning, resource allocation, budget management, and real-time tracking.
-                </p>
-
-                <p class="text-justify p-2">
-                    Ensure projects meet deadlines and budgets with our platform. Maximize efficiency, minimize costs, and take your company to the next level.
-                </p>
-            </div>
-
-            <div class="flex justify-around md:block mt-8 md:mt-0 md:flex-1">
-                <img class="lg:h-80 md:h-40 sm:h-20 rounded shadow" src="{{ asset('img/project_management.png') }}" alt="Project Management" />
-            </div>
-        </section> --}}
         <section class="md:mt-0 md:h-screen flex flex-col md:flex-row md:justify-between md:items-center lg:px-24 md:px-6 p-4 text-center md:text-left">
             <div class="md:flex-1 md:mr-10">
                 <h1 class="italic font-semibold text-5xl mb-7">

@@ -2,7 +2,8 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl leading-tight pointer text-stone-700 hover:text-stone-600 hover:underline">
             <a href="/projects/{{ $id }}">
-                {{ $name ?? "Project Name" }}
+                {{ $name }}
+                ssss
             </a>
         </h2>
     </x-slot>
@@ -23,9 +24,11 @@
             <div class="bg-white shadow-md rounded overflow-hidden w-full p-2">
 
                 <div>
-                    <h1 class="rounded shadow p-2 italic text-2xl font-bold text-stone-600">
-                        Project: {{ $name }}
-                    </h1>
+                    <h2 class="font-semibold text-xl leading-tight pointer text-stone-700 hover:text-stone-600 hover:underline rounded shadow p-2 italic">
+                        <a href="/projects/{{ $id }}">
+                            {{ $name }}
+                        </a>
+                    </h2>
                 </div>
 
                 <div class="flex items-center justify-between px-4 py-1">

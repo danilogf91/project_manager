@@ -6,6 +6,6 @@
     </x-slot>
 
         <div class="mx-auto mt-1 sm:px-6 lg:px-8">
-            <livewire:test-chart/>
+            <livewire:test-chart />
         </div>
 </x-app-layout>

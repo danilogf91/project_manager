@@ -7,6 +7,7 @@ use App\Models\Project;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 
 class DataTable extends Component
@@ -15,7 +16,9 @@ class DataTable extends Component
 
     public $is_admin_user = false;
     public $active = false;
-    public $search;
+
+    #[Url()]
+    public $search = '';
     public $name;
     public $id;
     public $perPage = 5;

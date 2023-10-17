@@ -1,6 +1,5 @@
 <div class="p-2">
     <div class="justify-center rounded flex flex-col md:flex-row gap-2">
-
         <div class="md:col-span-1 col-span-3">
             <select
                 wire:model.live="searchData"
@@ -56,9 +55,9 @@
             </select>
         </div>
 
-        <div class="md:col-span-1 col-span-3">
-            <input type="number" wire:model="rateValue" class="rounded">
-        </div>
+        {{-- <div class="md:col-span-1 col-span-3">
+            <input type="number" wire:model="rateValue" class="rounded text-center px-7 py-2 w-full border">
+        </div> --}}
     </div>
 
 

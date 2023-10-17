@@ -25,7 +25,7 @@
                 </div>
             @enderror
 
-            <div wire:loading wire:target="saveData" class="text-xl bg-green-100 border-l-4 border-green-500 text-green-700 p-4 w-full mx-auto">
+            <div wire:loading wire:target="saveData" class="text-xl bg-green-500 border-l-4 border-green-500 text-green-700 p-4 w-full mx-auto">
                 Procesando...
             </div>
 

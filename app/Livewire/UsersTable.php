@@ -7,12 +7,14 @@ use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UsersTable extends Component
 {
     use WithPagination;
 
+    #[Url()]
     public $search = '';
     public $admin = '';
 

@@ -177,7 +177,6 @@
                                     @if ($is_admin_user)
                                         <td class="px-2 py-1 flex items-center justify-start">
                                             @if ($project->upload_pda)
-                                                {{-- <livewire:download-pdf wire:key="download-pdf-{{$project->id}}" :project="$project" /> --}}
                                                 <livewire:delete-or-edit-pdf wire:key="delete-pdf-{{$project->id}}" :project="$project" />
                                             @else
                                                 <livewire:save-pdf wire:key="save-pdf-{{$project->id}}" :project="$project" />

@@ -76,7 +76,7 @@ class DashboardProjects extends Component
         $dataModel = new Data();
         $this->columnNames = $dataModel->getColumnNames();
 
-        $this->rateValue = 1;
+        $this->rateValue = (float)(1 / (float)($project->rate));
         $this->rateConvertion = 1;
     }
 
@@ -85,7 +85,7 @@ class DashboardProjects extends Component
         if ($property === "dollarOrEuro" && $value === "euro") {
             $this->rateConvertion = 1;
         } else {
-            $this->rateConvertion = (float)$this->rateValue;
+            $this->rateConvertion = (float)(1 / (float) $this->rateValue);
         }
 
         $this->total = $this->getValueBySearch('global_price_euros');
@@ -131,8 +131,8 @@ class DashboardProjects extends Component
                 'resumeGraph' => $this->columnDataGraphTwo($this->createResumeGraph(), $title),
                 'resumePercentageGraph' => $this->columnDataGraphTwo($this->createResumeGraph("%"), "Resume %"),
                 'pieChartModel' => $this->pieDataGraph($area, $this->rateConvertion),
-                'pieChartModelResume' => $this->pieDataGraphTwo($this->createResumePieGraph(), $this->rateConvertion, "budgeted - real"),
-                'pieChartModelResumeTwo' => $this->pieDataGraphTwo($this->createResumePieGraphTwo(), $this->rateConvertion, "budgeted - booked"),
+                'pieChartModelResume' => $this->pieDataGraphTwo($this->createResumePieGraph(), $this->rateConvertion, "Account Balance With Real Value"),
+                'pieChartModelResumeTwo' => $this->pieDataGraphTwo($this->createResumePieGraphTwo(), $this->rateConvertion, "Account Balance With Booked"),
                 'multiColumnChartModel' => $this->multicolumnDataGraph($dataQuery),
             ]);
     }

@@ -80,11 +80,8 @@ class TestChart extends Component
     public $totalsByInvestment = [];
     public $totalsByState = [];
 
-
     public function updated($property, $value)
     {
-
-        // dd($property, $value);
 
         if ($property === "typeOfProjectSearch") {
             $this->stateProject = Project::distinct()
@@ -96,7 +93,6 @@ class TestChart extends Component
                     return $query->whereRaw('YEAR(projects.start_date) = ?', [$this->yearSearch]);
                 })
                 ->pluck('state');
-            // dd($this->stateProject);
         }
 
         if ($property === "stateSearch") {
@@ -109,8 +105,6 @@ class TestChart extends Component
                     return $query->whereRaw('YEAR(projects.start_date) = ?', [$this->yearSearch]);
                 })
                 ->pluck('classification_of_investments');
-
-            // dd($this->typeOfProject);
         }
 
         if ($property === "yearSearch") {
@@ -130,7 +124,7 @@ class TestChart extends Component
         }
 
         if ($property === "dollarOrEuro" && $value === "dollar") {
-            $this->exchangeRate = (float)$this->rateValue;
+            $this->exchangeRate = (float)(1 / (float)$this->rateValue);
         } else {
             $this->exchangeRate = 1;
         }
@@ -154,7 +148,46 @@ class TestChart extends Component
 
         arsort($this->projectsData);
 
-        $this->totalsByInvestment = $this->getTotalBySearchParams('investments', $this->yearSearch, $this->stateSearch, $this->typeOfProjectSearch);
+        // $this->totalsByInvestment = $this->getTotalBySearchParams('investments', $this->yearSearch, $this->stateSearch, $this->typeOfProjectSearch);
+        $yearSearch = $this->yearSearch;
+        $campo = $this->stateSearch;
+        $campo1 = $this->typeOfProjectSearch;
+        // $this->totalsByInvestment = Project::select('investments')
+        //     ->addSelect(DB::raw('SUM(data.global_price_euros) as total'))
+        //     ->leftJoin('data', 'projects.id', '=', 'data.project_id')
+        //     ->when(is_numeric($yearSearch), function ($query) use ($yearSearch) {
+        //         $query->whereYear('start_date', $yearSearch);
+        //     })
+        //     ->when($campo !== 'all', function ($query) use ($campo) {
+        //         $query->where('state', $campo);
+        //     })
+        //     ->when($campo1 !== 'all', function ($query) use ($campo1) {
+        //         $query->where('classification_of_investments', $campo1);
+        //     })
+        //     ->groupBy('investments')
+        //     ->pluck('total', 'investments')
+        //     ->toArray();
+
+        $this->totalsByInvestment = Project::select('investments')
+            ->addSelect(DB::raw('SUM(data.global_price_euros) as total'))
+            ->leftJoin('data', 'projects.id', '=', 'data.project_id')
+            ->when(is_numeric($yearSearch), function ($query) use ($yearSearch) {
+                $query->whereYear('start_date', $yearSearch);
+            })
+            ->when($campo !== 'all', function ($query) use ($campo) {
+                $query->where('state', $campo);
+            })
+            ->when($campo1 !== 'all', function ($query) use ($campo1) {
+                $query->where('classification_of_investments', $campo1);
+            })
+            ->when(!empty($this->types), function ($query) {
+                $query->whereIn('investments', $this->types);
+            })
+            ->groupBy('investments')
+            ->pluck('total', 'investments')
+            ->toArray();
+
+
         arsort($this->totalsByInvestment);
         $this->totalsByState = $this->getTotalBySearchParams('state', $this->yearSearch, $this->stateSearch, $this->typeOfProjectSearch);
         arsort($this->totalsByState);
@@ -176,7 +209,7 @@ class TestChart extends Component
                     return $numProjectsGraph->addColumn($type, round((float)$value, 2), $this->colors[$type]);
                 },
                 (new ColumnChartModel())
-                    // ->setTitle('#')
+                    // ->setTitle('# jjjjjjjj')
                     ->setAnimated($this->firstRun)
                     ->withOnColumnClickEventName('onColumnClick')
                     ->setLegendVisibility(true)
@@ -187,6 +220,8 @@ class TestChart extends Component
                     ->withLegend()
                     ->setDataLabelsEnabled($this->showDataLabels)
             );
+
+
 
         $numProjectsGraphValues = (new ColumnChartModel())
             // ->setTitle('Projects borrar')
@@ -353,6 +388,40 @@ class TestChart extends Component
         arsort($this->projectsData);
     }
 
+    public function downloadGraph()
+    {
+        // $this->projectsFinished = $this->searchValue($this->yearSearch, 'finished', $this->typeOfProjectSearch);
+
+        // $this->projectsExecuted = $this->searchValue($this->yearSearch, 'execution', $this->typeOfProjectSearch);
+
+        // $this->projectsPlaned = $this->searchValue($this->yearSearch, 'planification', $this->typeOfProjectSearch);
+
+        // $this->projects =  0;
+
+        // $projectsData = [
+        //     'Total' => $this->projects,
+        //     'Execution' => $this->projectsExecuted,
+        //     'Planification' => $this->projectsPlaned,
+        //     'Finished' => $this->projectsFinished,
+        // ];
+
+
+        // $image = $projectsData->toBase64('png'); // Convierte la gráfica a formato PNG
+
+        // $base64Image = base64_decode($image);
+
+        // return response()->stream(
+        //     function () use ($base64Image) {
+        //         echo $base64Image;
+        //     },
+        //     200,
+        //     [
+        //         'Content-Type' => 'image/png',
+        //         'Content-Disposition' => 'attachment; filename=grafica.png',
+        //     ]
+        // );
+    }
+
     public function generateColor()
     {
         // Genera tres valores hexadecimales aleatorios para los componentes rojo, verde y azul
@@ -483,7 +552,7 @@ class TestChart extends Component
             $query->where('state', $this->stateSearch);
         })->when($this->typeOfProjectSearch !== 'all', function ($query) {
             $query->where('classification_of_investments', $this->typeOfProjectSearch);
-        })->count();
+        })->where('data_uploaded', 1)->count();
     }
 
     public function getProjectsData()

@@ -7,7 +7,7 @@
 
     @if (session()->has('edit-users'))
         <div class="fixed top-4 right-4 z-10">
-            <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4">
+            <div class="bg-green-400 border-l-4 border-green-700 text-green-700 p-4">
                 <p>{{ session('edit-users') }}</p>
             </div>
         </div>

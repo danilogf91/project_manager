@@ -1,7 +1,7 @@
 <div>
     <button
         wire:click="$set('openModal', true)"
-        class="w-6 h-6 mr-1 bg-orange-500 text-white rounded">
+        class="w-6 h-6 mr-1 bg-blue-600 text-white rounded">
         <x-icon name="inbox-arrow-down" />
     </button>
 

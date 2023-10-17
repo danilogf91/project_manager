@@ -7,6 +7,7 @@ use App\Models\Project;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProjectsTable extends Component
@@ -14,6 +15,8 @@ class ProjectsTable extends Component
     use WithPagination;
 
     public $perPage = 5;
+
+    #[Url()]
     public $search = '';
 
     public $sortBy = 'id';
