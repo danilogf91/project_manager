@@ -62,6 +62,7 @@
 
 
     <div class="rounded flex flex-col md:flex-row gap-2 mt-2">
+        <button wire:click="radarDataGraphSave">Descargar Gráfica</button>
 
         <div class="w-full md:w-1/5 bg-white rounded">
             <div class="p-4 text-center"> <!-- Agregar text-center aquí -->
@@ -117,11 +118,22 @@
             />
         </div>
 
-        <div class="h-[30rem] shadow rounded p-4 border bg-white flex-1">
+        {{-- <div class="h-[30rem] shadow rounded p-4 border bg-white flex-1">
             <livewire:livewire-column-chart
+            id="my-unique-chart"
             key="{{ $multiColumnChartModel->reactiveKey() }}"
             :column-chart-model="$multiColumnChartModel"/>
-       </div>
+            <button id="captureButton">Capturar y Descargar</button>
+       </div> --}}
+
+        <div class="h-[30rem] shadow rounded p-4 border bg-white flex-1">
+            <livewire:livewire-column-chart
+                id="my-unique-chart"
+                key="{{ $multiColumnChartModel->reactiveKey() }}"
+                :column-chart-model="$multiColumnChartModel"/>
+            <button id="captureButton">Capturar y Descargar</button>
+        </div>
+
     </div>
 
     <div class="flex flex-col mt-2 md:flex-row gap-2">
@@ -176,3 +188,70 @@
     </div>
 
 </div>
+{{--
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Agrega un controlador de clic al botón de captura
+    document.getElementById('captureButton').addEventListener('click', function() {
+        // Obtén el elemento que contiene la gráfica por su id único
+        var chartContainer = document.getElementById('my-unique-chart');
+
+        // Crea un elemento Canvas del mismo tamaño que el contenedor de la gráfica
+        var canvas = document.createElement('canvas');
+        canvas.width = chartContainer.offsetWidth;
+        canvas.height = chartContainer.offsetHeight;
+
+        // Dibuja la gráfica en el lienzo
+        var context = canvas.getContext('2d');
+        context.drawImage(chartContainer, 0, 0, canvas.width, canvas.height);
+
+        // Crea una URL de datos para el lienzo (imagen en formato base64)
+        var dataUrl = canvas.toDataURL('image/png');
+
+        // Crea un enlace de descarga y establece la URL de datos como su origen
+        var downloadLink = document.createElement('a');
+        downloadLink.href = dataUrl;
+        downloadLink.download = 'chart.png';
+        downloadLink.textContent = 'Descargar la imagen';
+
+        // Dispara el clic en el enlace de descarga para iniciar la descarga
+        downloadLink.click();
+    });
+});
+</script> --}}
+
+
+<script>
+    document.addEventListener('livewire:initialized', () => {
+
+        document.getElementById('captureButton').addEventListener('click', function() {
+        // Obtén el elemento que contiene la gráfica por su id único
+        var chartContainer = document.getElementById('my-unique-chart');
+
+        if (chartContainer) {
+            // Crea un elemento Canvas del mismo tamaño que el contenedor de la gráfica
+        var canvas = document.createElement('canvas');
+        canvas.width = chartContainer.offsetWidth;
+        canvas.height = chartContainer.offsetHeight;
+
+        // Dibuja la gráfica en el lienzo
+        var context = canvas.getContext('2d');
+        context.drawImage(chartContainer, 0, 0, canvas.width, canvas.height);
+
+        // Crea una URL de datos para el lienzo (imagen en formato base64)
+        var dataUrl = canvas.toDataURL('image/png');
+
+        // Crea un enlace de descarga y establece la URL de datos como su origen
+        var downloadLink = document.createElement('a');
+        downloadLink.href = dataUrl;
+        downloadLink.download = 'chart.png';
+        downloadLink.textContent = 'Descargar la imagen';
+
+        // Dispara el clic en el enlace de descarga para iniciar la descarga
+        downloadLink.click();
+        } else {
+            console.error("Elemento con id 'my-unique-chart' no encontrado.");
+        }
+    });
+    });
+</script>

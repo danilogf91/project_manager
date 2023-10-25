@@ -32,12 +32,15 @@ class DashboardProjects extends Component
 
     public $resumePie = [
         'Real',
-        'Rest'
+        'Rest',
+        'Booked'
     ];
 
     public $resumePieColors = [
         'Real' => '#5BCA5A',
         'Rest' => '#CC5555',
+        'Booked' => '#5BCA5A'
+
     ];
 
     public $project;
@@ -213,8 +216,16 @@ class DashboardProjects extends Component
 
     public function radarDataGraph($data)
     {
+        if ($this->dollarOrEuro === 'euro') {
+            $titulo = str_replace("dollars", "euros", $this->investments);
+            $label = "Investment €";
+        } else {
+            $titulo = str_replace("euros", "dollars", $this->investments);
+            $label = "Investment $";
+        }
+
         $radarChartModel = LivewireCharts::radarChartModel()
-            ->setTitle($this->textTransform($this->searchData) . " -> " . $this->textTransform($this->investments))
+            ->setTitle($this->textTransform($this->searchData) . " -> " . $this->textTransform($titulo))
             ->setAnimated($this->firstRun)
             ->withOnPointClickEvent('onPointClick')
             ->withGrid()
@@ -224,18 +235,70 @@ class DashboardProjects extends Component
 
         foreach ($data as $element) {
             if ($this->validateNumber($element['total']) && $element[$this->searchData] != null) {
-                $radarChartModel->addSeries("Investment", $element[$this->searchData], $this->convertAndUpdate($element['total']));
+                $radarChartModel->addSeries($label, $element[$this->searchData], $this->convertAndUpdate($element['total']));
             }
         }
         return $radarChartModel;
     }
 
+    // public function radarDataGraphSave()
+    // {
+    //     $constantData = [
+    //         ['total' => 50, 'searchData' => 'Value1'],
+    //         ['total' => 75, 'searchData' => 'Value2'],
+    //         ['total' => 30, 'searchData' => 'Value3'],
+    //         ['total' => 90, 'searchData' => 'Value4'],
+    //     ];
+
+    //     if ($this->dollarOrEuro === 'euro') {
+    //         $label = "Investment €";
+    //     } else {
+    //         $label = "Investment $";
+    //     }
+
+    //     $radarChartModel = LivewireCharts::radarChartModel()
+    //         // ->setTitle($this->textTransform($this->searchData) . " -> " . $this->textTransform($titulo))
+    //         ->setAnimated($this->firstRun)
+    //         ->withOnPointClickEvent('onPointClick')
+    //         ->withGrid()
+    //         // ->withDataLabels()
+    //         ->withLegend()
+    //         ->legendPositionTop();
+
+    //     foreach ($constantData as $element) {
+    //         if ($this->validateNumber($element['total']) && $element['searchData'] != null) {
+    //             $radarChartModel->addSeries($label, $element['searchData'], $this->convertAndUpdate($element['total']));
+    //         }
+    //     }
+
+    //     $image = $radarChartModel->toBase64('png'); // Convierte la gráfica a formato PNG
+
+    //     $base64Image = base64_decode($image);
+
+    //     return response()->stream(
+    //         function () use ($base64Image) {
+    //             echo $base64Image;
+    //         },
+    //         200,
+    //         [
+    //             'Content-Type' => 'image/png',
+    //             'Content-Disposition' => 'attachment; filename=grafica.png',
+    //         ]
+    //     );
+    // }
+
     public function pieDataGraph($data, $rate)
     {
+        if ($this->dollarOrEuro === 'euro') {
+            $titulo = str_replace("dollars", "euros", $this->investments);
+        } else {
+            $titulo = str_replace("euros", "dollars", $this->investments);
+        }
+
         $pieChartModel =
             (new PieChartModel())
             // ->setTitle($this->searchData . " " . $this->investments)
-            ->setTitle($this->textTransform($this->searchData) . " -> " . $this->textTransform($this->investments))
+            ->setTitle($this->textTransform($this->searchData) . " -> " . $this->textTransform($titulo))
             ->setAnimated($this->firstRun)
             ->setLegendVisibility(true)
             ->withOnSliceClickEvent('onSliceClick')
@@ -267,7 +330,7 @@ class DashboardProjects extends Component
             ->setType('donut');
 
         foreach ($data as $element) {
-            if ($this->validateNumber($element['total']) && $element['label'] != null) {
+            if ($this->validateNumberNew($element['total']) && $element['label'] != null) {
                 $pieChartModel->addSlice($element['label'], round($element['total'] * $rate, 2), $this->resumePieColors[$element['label']]);
             }
         }
@@ -339,6 +402,11 @@ class DashboardProjects extends Component
         return (is_numeric($number) && !is_nan($number) && $number > 0);
     }
 
+    public function validateNumberNew($number)
+    {
+        return (is_numeric($number) && !is_nan($number));
+    }
+
     public function convertAndUpdate($value)
     {
         return round(((float)$value * $this->rateConvertion), 2);
@@ -392,6 +460,9 @@ class DashboardProjects extends Component
             $conversion = 100 / $this->budgeted;
         }
 
+        $conversion = 1;
+
+
         return [
             [
                 "label" => "Real",
@@ -412,10 +483,13 @@ class DashboardProjects extends Component
             $conversion = 100 / $this->budgeted;
         }
 
+        $conversion = 1;
+
+
         return [
             [
-                "label" => "Real",
-                "total" => round($this->real_value * $conversion, 2)
+                "label" => "Booked",
+                "total" => round($this->booked * $conversion, 2)
             ],
             [
                 "label" => "Rest",

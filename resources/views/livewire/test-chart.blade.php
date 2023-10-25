@@ -90,10 +90,11 @@
     </div>
 
     <div class="rounded flex flex-col sm:flex-row gap-2 mt-2">
-
         <div class="w-full sm:w-1/5 bg-white rounded">
             <div class="p-2 text-center"> <!-- Agregar text-center aquí -->
-                <span class="text-2xl font-extrabold"># Projects</span>
+                <span class="text-2xl font-extrabold items-center align-middle">
+                    <x-icon name="pencil-square" class="w-6 h-6 mr-1 bg-blue-500 text-white rounded"/># Projects
+                </span>
                 <h3 class="text-xl font-semibold mt-2">{{ $projects }}</h3>
             </div>
         </div>
