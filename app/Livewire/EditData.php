@@ -61,6 +61,9 @@ class EditData extends Component
     #[Rule('nullable|string|max:255')]
     public $input_num;
 
+    #[Rule('nullable|string|max:255')]
+    public $supplier;
+
     #[Rule('nullable|string|max:2000')]
     public $observations;
 
@@ -86,6 +89,7 @@ class EditData extends Component
         $this->code = $data->code;
         $this->order_no = $data->order_no;
         $this->input_num = $data->input_num;
+        $this->supplier = $data->supplier;
         $this->description = $data->description;
         $this->observations = $data->observations;
         $id = $this->projectId;
@@ -118,6 +122,7 @@ class EditData extends Component
         $projectData->code = $this->code;
         $projectData->order_no = $this->order_no;
         $projectData->input_num = $this->input_num;
+        $projectData->supplier = $this->supplier;
         $projectData->description = $this->description;
         $projectData->observations = $this->observations;
         $projectData->save();

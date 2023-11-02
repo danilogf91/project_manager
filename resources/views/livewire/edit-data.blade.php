@@ -275,6 +275,22 @@
                     <x-input-error for='input_num'/>
                 </div>
 
+                <div class="col-span-3">
+                    <label
+                        htmlFor="supplier"
+                        class="block text-sm font-medium"
+                    >
+                        Supplier
+                    </label>
+                    <input
+                        wire:model.live="supplier"
+                        type="text"
+                        name="supplier"
+                        class="mt-1 p-2 w-full border rounded"
+                    />
+                    <x-input-error for='supplier'/>
+                </div>
+
                 {{-- <div class="col-span-3">
                     <label
 

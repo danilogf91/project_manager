@@ -62,7 +62,7 @@
 
 
     <div class="rounded flex flex-col md:flex-row gap-2 mt-2">
-        <button wire:click="radarDataGraphSave">Descargar Gráfica</button>
+        {{-- <button wire:click="radarDataGraphSave">Descargar Gráfica</button> --}}
 
         <div class="w-full md:w-1/5 bg-white rounded">
             <div class="p-4 text-center"> <!-- Agregar text-center aquí -->
